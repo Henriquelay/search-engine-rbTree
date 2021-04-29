@@ -70,7 +70,7 @@ RBT* RBT_insert(RBT *h, char* key, char* val) {
   int cmp = strcmp(key, h->key);
   if (cmp < 0) { h->l = RBT_insert(h->l, key, val); }
   else if (cmp > 0) { h->r = RBT_insert(h->r, key, val); }
-  else /*cmp == 0*/ { h->val = RBT_insert(h->val,val,NULL); }
+  else /*cmp == 0*/ { h->val = RBT_insert(h->val,val,"0"); }//antes era null talvez de problema
   // Lean left.
   if (is_red(h->r) && !is_red(h->l)) { h = rotate_left(h); }
   // Balance 4-node.

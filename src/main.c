@@ -4,6 +4,7 @@
 #include"../lib/rbTree.h"
 int main(int argc, char**argv){
   char* fileSource = argv[1];
-  RBT* tree;
+  puts(fileSource);
+  RBT* tree=NULL;
   readData(fileSource, tree);
 }

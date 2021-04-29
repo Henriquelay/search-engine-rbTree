@@ -2,6 +2,8 @@
 #define DATA_H_
 #include<stdlib.h>
 #include<stdio.h>
+#include<string.h>
+#include<ctype.h>
 #include"./rbTree.h"
 
 void readData(char* filename, RBT* tree);
