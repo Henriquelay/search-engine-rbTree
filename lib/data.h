@@ -5,6 +5,7 @@
 #include<string.h>
 #include<ctype.h>
 #include"./rbTree.h"
+#include "errorCheck.h"
 
 RBT* readData(char* filename, RBT* tree);
 int countLine(FILE* file);
