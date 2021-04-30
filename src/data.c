@@ -1,4 +1,6 @@
 #include"../lib/data.h"
+
+
 char* strlwr(char* string){
   for(int i=0; i< strlen(string);i++){
     string[i] = tolower(string[i]);
@@ -6,17 +8,20 @@ char* strlwr(char* string){
   return string;
 }
 
+
 int countLine(FILE* file){
   int count = 0;
   while(!feof(file)){
     char* s = malloc(1000*sizeof(char));
     size_t tamanho=1000;
-    getline(&s,&tamanho,file);
+    ssize_t nRead = getline(&s,&tamanho,file);
+    check_getLine(nRead);
     count++;
   }
   rewind(file);
   return count;
 }
+
 
 RBT* readData(char* fileSource, RBT* tree){
   RBT* stopTree=NULL;
@@ -36,7 +41,8 @@ RBT* readData(char* fileSource, RBT* tree){
   int numPages= countLine(index);
   char* line = malloc(1000*sizeof(char));
   for(int i = 0;i<numPages;i++){
-    fscanf(index,"%s",line);
+    int nItensRead = fscanf(index,"%s",line);
+    check_fscanf(nItensRead);
     tree = readPage(tree,line,fileSource,stopTree);
     memset(line,'\0',1000);
   }
@@ -44,6 +50,7 @@ RBT* readData(char* fileSource, RBT* tree){
   fclose(index);
   return tree;
 }
+
 
 RBT* readPage(RBT* tree, char* pageName, char* filesouce, RBT* stopwords){
   char* filenameAux = malloc(1000*sizeof(char));
@@ -55,7 +62,8 @@ RBT* readPage(RBT* tree, char* pageName, char* filesouce, RBT* stopwords){
   FILE* file = fopen(fileName,"r");
   char* word = malloc(1000*sizeof(char));
   while(!feof(file)){
-    fscanf(file,"%s",word);
+    int nItensRead = fscanf(file,"%s",word);
+    check_fscanf(nItensRead);
     char* finalWord = strdup(word);
     finalWord = strlwr(finalWord);
     if(!search(stopwords,finalWord)){
@@ -68,10 +76,13 @@ RBT* readPage(RBT* tree, char* pageName, char* filesouce, RBT* stopwords){
   free(word);
   return tree;
 }
+
+
 RBT* readStops(RBT* tree,FILE* file){
   char* word = malloc(1000*sizeof(char));
   while(!feof(file)){
-    fscanf(file,"%s",word);
+    int nItensRead = fscanf(file,"%s",word);
+    check_fscanf(nItensRead);
     char* finalWord = strdup(word);
     finalWord = strlwr(finalWord); 
     //colocar as finalwords em vermelha e preta ficou gambiarrado
