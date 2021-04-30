@@ -18,7 +18,7 @@ int countLine(FILE* file){
   return count;
 }
 
-void readData(char* fileSource, RBT* tree){
+RBT* readData(char* fileSource, RBT* tree){
   RBT* stopTree=NULL;
   char* stopFileAux = malloc(1000*sizeof(char));
   stpcpy(stopFileAux,fileSource);strcat(stopFileAux,"/stopwords.txt");
@@ -37,12 +37,12 @@ void readData(char* fileSource, RBT* tree){
   char* line = malloc(1000*sizeof(char));
   for(int i = 0;i<numPages;i++){
     fscanf(index,"%s",line);
-    puts(line);
     tree = readPage(tree,line,fileSource,stopTree);
     memset(line,'\0',1000);
   }
   free(line);
   fclose(index);
+  return tree;
 }
 
 RBT* readPage(RBT* tree, char* pageName, char* filesouce, RBT* stopwords){
@@ -58,8 +58,8 @@ RBT* readPage(RBT* tree, char* pageName, char* filesouce, RBT* stopwords){
     fscanf(file,"%s",word);
     char* finalWord = strdup(word);
     finalWord = strlwr(finalWord);
-    puts(finalWord);
     if(!search(stopwords,finalWord)){
+      
       tree = RBT_insert(tree,finalWord,pageName);
     }
     memset(word,'\0',1000);
@@ -73,8 +73,7 @@ RBT* readStops(RBT* tree,FILE* file){
   while(!feof(file)){
     fscanf(file,"%s",word);
     char* finalWord = strdup(word);
-    finalWord = strlwr(finalWord);
-          puts(finalWord);  
+    finalWord = strlwr(finalWord); 
     //colocar as finalwords em vermelha e preta ficou gambiarrado
     tree = RBT_insert(tree,finalWord,finalWord);
     memset(word,'\0',1000);

@@ -51,14 +51,14 @@ void flip_colors(RBT *h) {
 
 RBT* create_values(char* val, int color){
   RBT* new = malloc(sizeof(RBT));
-  new->key = val;
+  new->key = strdup(val);
   new->val = NULL;
   new->color=color;
   new->l=new->r=NULL;
 }
 RBT* create_node(char* key, char* val, int color){
   RBT* new = malloc(sizeof(RBT));
-  new->key = key;
+  new->key = strdup(key);
   new->val = create_values(val,1);
   new->color=color;
   new->l=new->r=NULL;
@@ -70,7 +70,7 @@ RBT* RBT_insert(RBT *h, char* key, char* val) {
   int cmp = strcmp(key, h->key);
   if (cmp < 0) { h->l = RBT_insert(h->l, key, val); }
   else if (cmp > 0) { h->r = RBT_insert(h->r, key, val); }
-  else /*cmp == 0*/ { h->val = RBT_insert(h->val,val,"0"); }//antes era null talvez de problema
+  else /*cmp == 0*/ { h->val = RBT_insert(h->val,val,key); }//antes era null talvez de problema
   // Lean left.
   if (is_red(h->r) && !is_red(h->l)) { h = rotate_left(h); }
   // Balance 4-node.

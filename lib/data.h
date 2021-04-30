@@ -6,7 +6,7 @@
 #include<ctype.h>
 #include"./rbTree.h"
 
-void readData(char* filename, RBT* tree);
+RBT* readData(char* filename, RBT* tree);
 int countLine(FILE* file);
 RBT* readPage(RBT* tree, char* pageName, char* filesouce, RBT* stopwords);
 RBT* readStops(RBT* tree,FILE* file);
