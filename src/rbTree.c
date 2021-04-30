@@ -55,13 +55,17 @@ RBT* create_values(char* val, int color){
   new->val = NULL;
   new->color=color;
   new->l=new->r=NULL;
+  return new;
 }
+
+
 RBT* create_node(char* key, char* val, int color){
   RBT* new = malloc(sizeof(RBT));
   new->key = strdup(key);
   new->val = create_values(val,1);
   new->color=color;
   new->l=new->r=NULL;
+  return new;
 }
 
 RBT* RBT_insert(RBT *h, char* key, char* val) {
