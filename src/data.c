@@ -17,6 +17,7 @@ int countLine(FILE* file){
     ssize_t nRead = getline(&s,&tamanho,file);
     check_getLine(nRead);
     count++;
+    free(s);
   }
   rewind(file);
   return count;
@@ -30,6 +31,7 @@ RBT* readData(char* fileSource, RBT* tree){
   char* stopFile = strdup(stopFileAux);
   free(stopFileAux);
   FILE* stops = fopen(stopFile,"r");
+  free(stopFile);
   // int numStopWord = countLine(stops);
   stopTree = readStops(stopTree,stops);
   fclose(stops);
@@ -46,6 +48,8 @@ RBT* readData(char* fileSource, RBT* tree){
     tree = readPage(tree,line,fileSource,stopTree);
     memset(line,'\0',1000);
   }
+  RBT_free(stopTree);
+  free(indexFile);
   free(line);
   fclose(index);
   return tree;
@@ -60,6 +64,7 @@ RBT* readPage(RBT* tree, char* pageName, char* filesouce, RBT* stopwords){
   char* fileName = strdup(filenameAux);
   free(filenameAux);
   FILE* file = fopen(fileName,"r");
+  free(fileName);
   char* word = malloc(1000*sizeof(char));
   while(!feof(file)){
     int nItensRead = fscanf(file,"%s",word);
@@ -70,6 +75,7 @@ RBT* readPage(RBT* tree, char* pageName, char* filesouce, RBT* stopwords){
       
       tree = RBT_insert(tree,finalWord,pageName);
     }
+    free(finalWord);
     memset(word,'\0',1000);
   }
   fclose(file);
@@ -87,6 +93,7 @@ RBT* readStops(RBT* tree,FILE* file){
     finalWord = strlwr(finalWord); 
     //colocar as finalwords em vermelha e preta ficou gambiarrado
     tree = RBT_insert(tree,finalWord,finalWord);
+    free(finalWord);
     memset(word,'\0',1000);
   }
   free(word);
