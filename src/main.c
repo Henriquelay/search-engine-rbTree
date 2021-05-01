@@ -34,5 +34,6 @@ int main(int argc, char**argv){
   RBT* tree=NULL;
   tree = readData(fileSource, tree);
   printaArvre(tree);
+  RBT_free(tree);
 }
 
