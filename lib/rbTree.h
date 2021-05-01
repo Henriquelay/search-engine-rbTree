@@ -17,8 +17,9 @@ struct node {
 int search(RBT *n, char* key);
 RBT* rotate_left(RBT *h);
 RBT* rotate_right(RBT *h);
-void flip_colors(RBT *h);
 RBT* RBT_insert(RBT *h, char* key, char* val);
+void flip_colors(RBT *h);
+void RBT_free(RBT *h);
 
 //nossas
 

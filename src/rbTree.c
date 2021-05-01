@@ -34,6 +34,7 @@ RBT* rotate_left(RBT *h) {
   x->l->color = 1;//vermelho
   return x;
 }
+
 RBT* rotate_right(RBT *h) {
   RBT *x = h->l;
   h->l = x->r;
@@ -58,7 +59,6 @@ RBT* create_values(char* val, int color){
   return new;
 }
 
-
 RBT* create_node(char* key, char* val, int color){
   RBT* new = malloc(sizeof(RBT));
   new->key = strdup(key);
@@ -82,4 +82,16 @@ RBT* RBT_insert(RBT *h, char* key, char* val) {
   // Split 4-node.
   if (is_red(h->l) && is_red(h->r)) { flip_colors(h); }
   return h;
+}
+
+void RBT_free(RBT *h){
+  if(h==NULL){
+    return;
+  }
+  RBT_free(h->l);
+  RBT_free(h->r);
+  free(h->key);
+  RBT_free(h->val);
+  free(h);
+
 }
