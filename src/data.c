@@ -72,7 +72,7 @@ RBT* readPage(RBT* tree, char* pageName, char* filesouce, RBT* stopwords){
     char* finalWord = strdup(word);
     finalWord = strlwr(finalWord);
     if(!search(stopwords,finalWord)){
-      
+
       tree = RBT_insert(tree,finalWord,pageName);
     }
     free(finalWord);
@@ -90,7 +90,6 @@ RBT* readStops(RBT* tree,FILE* file){
     int nItensRead = fscanf(file,"%s",word);
     check_fscanf(nItensRead);
     char* finalWord = strdup(word);
-    finalWord = strlwr(finalWord); 
     //colocar as finalwords em vermelha e preta ficou gambiarrado
     tree = RBT_insert(tree,finalWord,finalWord);
     free(finalWord);
@@ -100,3 +99,62 @@ RBT* readStops(RBT* tree,FILE* file){
   return tree;
 }
 
+
+List* readGraph(char* filesource){
+    char* graph_file_name = malloc(1000*sizeof(char));
+    strcpy(graph_file_name, filesource);
+    strcat(graph_file_name, "/graph.txt");
+    GraphNode* pagesTree = NULL;
+    List* pagesList =  malloc(sizeof(List));
+    newList(pagesList);
+
+    char* line = NULL;
+    size_t len = 0;
+    printf("O arquivo é %s\n", graph_file_name);
+    FILE* graph_file = fopen(graph_file_name, "r");
+    while(!feof(graph_file)){
+      ssize_t nRead = getline(&line, &len, graph_file);
+      check_getLine(nRead);
+      char pageName[1000];
+      int numberOfLinks;
+      int numberOfReadChars;
+      sscanf(line, "%s %d %n", pageName, &numberOfLinks, &numberOfReadChars);
+      line = line + numberOfReadChars;
+
+      Page** linkedPages = getPageReferences(line, numberOfLinks, pagesTree);
+      Page* thisPage = initializePage(pageName, -1, numberOfLinks, linkedPages);
+      pagesTree = GraphNode_insert(
+          pagesTree, thisPage->pageName, thisPage, 1, copyPage);
+      Page* thisPageInNodeRef = pagesTree->data;
+      if(thisPage != thisPageInNodeRef){
+        freePage(thisPage, 0);
+      }
+      addTail(pagesList, thisPageInNodeRef);
+    }
+
+    return pagesList;
+}
+
+
+Page** getPageReferences(char* line, int numberOfLinks, GraphNode* pagesTree){
+      Page** linkedPages = malloc(numberOfLinks * sizeof(Page*));
+      int nCharacterRead;
+      for(int i=0; i<numberOfLinks; i++){
+        char linkedPage[1000];
+        sscanf(line, "%s %n", linkedPage, &nCharacterRead);
+        line = line + nCharacterRead;
+
+        GraphNode* pageNode = searchGT(pagesTree, linkedPage);
+        if(!pageNode){
+          Page* newPage = malloc(sizeof(Page));
+          newPage->listPages = NULL;
+          newPage->nOutLinks = -1;
+          newPage->pageName = strdup(linkedPage);
+          newPage->powerRank = -1;
+          linkedPages[i] = newPage;
+          GraphNode_insert(pagesTree, linkedPage, newPage, 0, NULL);
+        }
+        else{linkedPages[i] = (Page*)pageNode->data;}
+      }
+      return linkedPages;
+}
