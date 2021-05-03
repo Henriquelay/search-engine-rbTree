@@ -31,9 +31,18 @@ void printaArvre(RBT* arvre){
 
 int main(int argc, char**argv){
   char* fileSource = argv[1];
+  printf("Cocozinho\n");
   RBT* tree=NULL;
   tree = readData(fileSource, tree);
   printaArvre(tree);
   RBT_free(tree);
+
+  List* pageList = readGraph(fileSource);
+  Node* pageNode = pageList->head;
+  printf("Vou printar as paginas\n");
+  while(pageNode != NULL){
+    printPage(pageNode->page);
+    pageNode = pageNode->next;
+  }
 }
 
