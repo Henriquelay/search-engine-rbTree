@@ -9,17 +9,17 @@ typedef struct node RBT;
 
 struct node {
     char *key;
-    RBT *val;
-    int color;
+    void *value;
+    char color;
     RBT *l, *r;
 };
 
-int search(RBT *n, char *key);
-RBT *rotate_left(RBT *h);
-RBT *rotate_right(RBT *h);
-RBT *RBT_insert(RBT *h, char *key, char *val);
-void flip_colors(RBT *h);
+RBT *RBT_search(RBT *n, char *key);
+RBT *RBT_insert(RBT *h, char *key, void *val);
 void RBT_free(RBT *h);
+
+void RBT_runOnAll_inOrder(RBT *h, void (*visit)(RBT *));
+void RBT_print(RBT *h);
 
 //nossas
 
