@@ -18,3 +18,14 @@ void check_fscanf(int nItensRead)
       exit(errno);
     }
 }
+
+
+void checkNullPointer(void* pointer, const char* errorMessage)
+{
+    if(!pointer)
+    {
+        perror(errorMessage);
+        exit(1);
+
+    }
+}

@@ -11,5 +11,7 @@ void check_getLine(ssize_t nRead);
 
 void check_fscanf(int nRead);
 
+void checkNullPointer(void* pointer, const char* errorMessage);
+
 
 #endif
