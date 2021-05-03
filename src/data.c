@@ -15,8 +15,11 @@ int countLine(FILE* file){
     char* s = malloc(1000*sizeof(char));
     size_t tamanho=1000;
     ssize_t nRead = getline(&s,&tamanho,file);
-    check_getLine(nRead);
-    count++;
+    // check_getLine(nRead);
+    nRead = nRead;
+    if(nRead != EOF){
+      count++;
+    }
     free(s);
   }
   rewind(file);
@@ -44,8 +47,10 @@ RBT* readData(char* fileSource, RBT* tree){
   char* line = malloc(1000*sizeof(char));
   for(int i = 0;i<numPages;i++){
     int nItensRead = fscanf(index,"%s",line);
-    check_fscanf(nItensRead);
-    tree = readPage(tree,line,fileSource,stopTree);
+    // check_fscanf(nItensRead);
+    if(nItensRead != EOF){
+    tree = readPage(tree,line,fileSource,stopTree); 
+    }
     memset(line,'\0',1000);
   }
   RBT_free(stopTree);
@@ -68,12 +73,13 @@ RBT* readPage(RBT* tree, char* pageName, char* filesouce, RBT* stopwords){
   char* word = malloc(1000*sizeof(char));
   while(!feof(file)){
     int nItensRead = fscanf(file,"%s",word);
-    check_fscanf(nItensRead);
+    // check_fscanf(nItensRead);
     char* finalWord = strdup(word);
-    finalWord = strlwr(finalWord);
-    if(!search(stopwords,finalWord)){
-
-      tree = RBT_insert(tree,finalWord,pageName);
+    if(nItensRead != EOF){
+      finalWord = strlwr(finalWord);
+      if(!search(stopwords,finalWord)){
+        tree = RBT_insert(tree,finalWord,pageName);
+      }
     }
     free(finalWord);
     memset(word,'\0',1000);
@@ -88,10 +94,13 @@ RBT* readStops(RBT* tree,FILE* file){
   char* word = malloc(1000*sizeof(char));
   while(!feof(file)){
     int nItensRead = fscanf(file,"%s",word);
-    check_fscanf(nItensRead);
+    // check_fscanf(nItensRead);
     char* finalWord = strdup(word);
     //colocar as finalwords em vermelha e preta ficou gambiarrado
-    tree = RBT_insert(tree,finalWord,finalWord);
+    if(nItensRead != EOF){
+      tree = RBT_insert(tree,finalWord,finalWord);
+    }
+    
     free(finalWord);
     memset(word,'\0',1000);
   }
@@ -114,22 +123,24 @@ List* readGraph(char* filesource){
     FILE* graph_file = fopen(graph_file_name, "r");
     while(!feof(graph_file)){
       ssize_t nRead = getline(&line, &len, graph_file);
-      check_getLine(nRead);
-      char pageName[1000];
-      int numberOfLinks;
-      int numberOfReadChars;
-      sscanf(line, "%s %d %n", pageName, &numberOfLinks, &numberOfReadChars);
-      line = line + numberOfReadChars;
+      // check_getLine(nRead);
+      if(nRead != EOF){
+        char pageName[1000];
+        int numberOfLinks;
+        int numberOfReadChars;
+        sscanf(line, "%s %d %n", pageName, &numberOfLinks, &numberOfReadChars);
+        line = line + numberOfReadChars;
 
-      Page** linkedPages = getPageReferences(line, numberOfLinks, pagesTree);
-      Page* thisPage = initializePage(pageName, -1, numberOfLinks, linkedPages);
-      pagesTree = GraphNode_insert(
-          pagesTree, thisPage->pageName, thisPage, 1, copyPage);
-      Page* thisPageInNodeRef = pagesTree->data;
-      if(thisPage != thisPageInNodeRef){
-        freePage(thisPage, 0);
+        Page** linkedPages = getPageReferences(line, numberOfLinks, pagesTree);
+        Page* thisPage = initializePage(pageName, -1, numberOfLinks, linkedPages);
+        pagesTree = GraphNode_insert(
+            pagesTree, thisPage->pageName, thisPage, 1, copyPage);
+        Page* thisPageInNodeRef = pagesTree->data;
+        if(thisPage != thisPageInNodeRef){
+          freePage(thisPage, 0);
+        }
+        addTail(pagesList, thisPageInNodeRef);
       }
-      addTail(pagesList, thisPageInNodeRef);
     }
 
     return pagesList;

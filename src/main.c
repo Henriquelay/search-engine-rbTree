@@ -31,7 +31,6 @@ void printaArvre(RBT* arvre){
 
 int main(int argc, char**argv){
   char* fileSource = argv[1];
-  printf("Cocozinho\n");
   RBT* tree=NULL;
   tree = readData(fileSource, tree);
   printaArvre(tree);
