@@ -1,6 +1,6 @@
 #include "../lib/page.h"
 
-Page *initializePage(char *pageName, float powerRank, int nOutLinks, Page **listPages) {
+Page *Page_init(char *pageName, float powerRank, int nOutLinks, Page **listPages) {
     Page *page = malloc(sizeof(Page));
     page->pageName = strdup(pageName);
     page->powerRank = powerRank;
@@ -9,7 +9,7 @@ Page *initializePage(char *pageName, float powerRank, int nOutLinks, Page **list
     return page;
 }
 
-void copyPage(void *pageDest, void *pageSrc) {
+void Page_copy(void *pageDest, void *pageSrc) {
     Page *castedDestPage = (Page *)pageDest;
     Page *castedSrcPage = (Page *)pageSrc;
     castedDestPage->listPages = castedSrcPage->listPages;
@@ -17,7 +17,7 @@ void copyPage(void *pageDest, void *pageSrc) {
     castedDestPage->nOutLinks = castedSrcPage->nOutLinks;
 }
 
-void freePage(Page *page, int freeLinkedPages) {
+void Page_destroy(Page *page, int freeLinkedPages) {
     free(page->pageName);
     if (freeLinkedPages) {
         free(page->listPages);
@@ -25,16 +25,20 @@ void freePage(Page *page, int freeLinkedPages) {
     free(page);
 }
 
-void printPage(Page *page) {
-    printf("##############printPage################\n");
-    printf("O nome da página é ");
+void Page_print(Page *page) {
+    if (page == NULL) {
+        puts("NULL");
+        return;
+    }
+    printf("printPage\n");
+    printf("Name: '%s'\n", page->pageName);
     puts(page->pageName);
-    printf("O page rank é: %lf\n", page->powerRank);
-    printf("O número de links saindo da página é %d\n", page->nOutLinks);
+    printf("Page Rank: %lf\n", page->powerRank);
+    printf("O num link out: %d\n", page->nOutLinks);
     for (int i = 0; i < page->nOutLinks; i++) {
         printf(
-            "O link %d é a página %s\n",
-            i, (page->listPages[i])->pageName);
+            "Link %d points to '%s'\n",
+            i, page->listPages[i] ? page->listPages[i]->pageName : "NULL");
     }
-    printf("##############printPage################\n");
+    printf("---\n");
 }

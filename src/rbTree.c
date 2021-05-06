@@ -45,6 +45,10 @@ void RBT_flip_colors(RBT *h) {
 }
 
 RBT *create_values(void *val, char color) {
+    // Won't create values if NULL is passed on insert
+    if (val == NULL) {
+        return NULL;
+    }
     RBT *new = malloc(sizeof(RBT));
     new->key = strdup(val);
     new->value = NULL;
@@ -75,7 +79,7 @@ RBT *RBT_insert(RBT *h, char *key, void *val) {
         h->r = RBT_insert(h->r, key, val);
     } else /*cmp == 0*/ {
         // Updating
-        h->value = val;
+        h->value = RBT_insert(h->value, val, NULL);
     }
     // Lean left.
     if (is_red(h->r) && !is_red(h->l)) {
@@ -92,28 +96,38 @@ RBT *RBT_insert(RBT *h, char *key, void *val) {
     return h;
 }
 
-void RBT_free(RBT *h) {
-    if (h == NULL) {
-        return;
+void RBT_runOnAll_preOrder(RBT *h, void (*visit)(RBT *)) {
+    if (h != NULL) {
+        visit(h);
+        RBT_runOnAll_preOrder(h->l, visit);
+        RBT_runOnAll_preOrder(h->r, visit);
     }
-    RBT_free(h->l);
-    RBT_free(h->r);
-    free(h->key);
-    RBT_free(h->value);
-    free(h);
 }
 
 void RBT_runOnAll_inOrder(RBT *h, void (*visit)(RBT *)) {
-    if (h->l != NULL) {
+    if (h != NULL) {
         RBT_runOnAll_inOrder(h->l, visit);
-    }
-    visit(h);
-    if (h->r != NULL) {
+        visit(h);
         RBT_runOnAll_inOrder(h->r, visit);
     }
 }
 
-void RBT_print(RBT *h) {
-    printf("Node: %s : ", h->key);
-    printf("%s\n", (char*) h->value);
+void RBT_runOnAll_postOrder(RBT *h, void (*visit)(RBT *)) {
+    if (h != NULL) {
+        RBT_runOnAll_postOrder(h->l, visit);
+        RBT_runOnAll_postOrder(h->r, visit);
+        visit(h);
+    }
+}
+
+void RBT_freeFunction(RBT *h) {
+    free(h->key);
+    free(h->value);
+    free(h);
+    h = NULL;
+}
+
+// Only frees keys
+void RBT_destroy(RBT* h) {
+    RBT_runOnAll_postOrder(h, RBT_freeFunction);
 }

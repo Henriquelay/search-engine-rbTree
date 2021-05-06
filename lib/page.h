@@ -14,12 +14,12 @@ struct page {
     Page **listPages;
 };
 
-Page *initializePage(char *pageName, float powerRank, int nOutLinks, Page **listPages);
+Page *Page_init(char *pageName, float powerRank, int nOutLinks, Page **listPages);
 
-void copyPage(void *pageDest, void *pageSrc);
+void Page_copy(void *pageDest, void *pageSrc);
 
-void freePage(Page *page, int freeLinkedPages);
+void Page_destroy(Page *page, int freeLinkedPages);
 
-void printPage(Page *page);
+void Page_print(Page *page);
 
 #endif

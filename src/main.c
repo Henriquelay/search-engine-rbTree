@@ -1,44 +1,29 @@
-#include "../lib/data.h"
-#include "../lib/rbTree.h"
+#include "../lib/reader.h"
 #include <stdio.h>
-#include <stdlib.h>
 
-
-void printaValues(RBT *arvre) {
-    if (arvre->l != NULL) {
-        printaValues(arvre->l);
-    }
-    if (arvre->r != NULL) {
-        printaValues(arvre->r);
-    }
-    puts(arvre->key);
-}
-
-void printaArvre(RBT *arvre) {
-    if (arvre->l != NULL) {
-        printaArvre(arvre->l);
-    }
-    if (arvre->r != NULL) {
-        printaArvre(arvre->r);
-    }
-    puts(arvre->key);
-    puts("values:");
-    printaValues(arvre->val);
-    puts("-----------------");
+void RBT_freeReverseIndexNode(RBT *h) {
+    if (h == NULL)
+        return;
+    free(h->key);
+    RBT_destroy(h->value);
+    free(h);
+    h = NULL;
 }
 
 int main(int argc, char **argv) {
     char *fileSource = argv[1];
     RBT *tree = NULL;
-    tree = readData(fileSource, tree);
-    printaArvre(tree);
-    RBT_free(tree);
+    readData(fileSource, &tree);
+    RBT_runOnAll_postOrder(tree, RBT_freeReverseIndexNode);
+    // RBT_destroy(tree);
+    // RBT_free(tree);
 
-    List *pageList = readGraph(fileSource);
-    Node *pageNode = pageList->head;
-    printf("Vou printar as paginas\n");
-    while (pageNode != NULL) {
-        printPage(pageNode->page);
-        pageNode = pageNode->next;
-    }
+    // readGraph(fileSource);
+
+    // Node *pageNode = pageList->head;
+    // printf("Vou printar as paginas\n");
+    // while (pageNode != NULL) {
+    //     printPage(pageNode->page);
+    //     pageNode = pageNode->next;
+    // }
 }

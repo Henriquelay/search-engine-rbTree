@@ -16,10 +16,13 @@ struct node {
 
 RBT *RBT_search(RBT *n, char *key);
 RBT *RBT_insert(RBT *h, char *key, void *val);
-void RBT_free(RBT *h);
+// void RBT_free(RBT *h); // Commented out for user to supply own free function with the runOnAll helpers
 
+void RBT_runOnAll_preOrder(RBT *h, void (*visit)(RBT *));
 void RBT_runOnAll_inOrder(RBT *h, void (*visit)(RBT *));
-void RBT_print(RBT *h);
+void RBT_runOnAll_postOrder(RBT *h, void (*visit)(RBT *));
+
+void RBT_destroy(RBT* h);
 
 //nossas
 
