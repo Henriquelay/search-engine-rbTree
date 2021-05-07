@@ -37,15 +37,24 @@ void Page_print(Page *page) {
         puts("NULL");
         return;
     }
-    printf("printPage\n");
     printf("Name: '%s'\n", page->pageName);
-    puts(page->pageName);
-    printf("Page Rank: %lf\n", page->pageRank);
-    printf("O num link out: %d\n", page->nOutLinks);
-    for (int i = 0; i < page->nOutLinks; i++) {
-        printf(
-            "Link %d points to '%s'\n",
-            i, page->outPages[i] ? page->outPages[i]->pageName : "NULL");
+    printf("PR: %lf\n", page->pageRank);
+    printf("Previous PR: %lf\n", page->pageRankPrev);
+    printf("Link out #: %d\n", page->nOutLinks);
+    if (page->outPages != NULL) {
+        for (unsigned int i = 0; i < page->nOutLinks; i++) {
+            printf(
+                "Link %d points to '%s'\n",
+                i, page->outPages[i] != NULL ? page->outPages[i]->pageName : "NULL");
+        }
+    }
+    printf("Link in #: %d\n", page->nInLinks);
+    if (page->inPages != NULL) {
+        for (unsigned int i = 0; i < page->nInLinks; i++) {
+            printf(
+                "Link %d points to '%s'\n",
+                i, page->inPages[i] != NULL ? page->inPages[i]->pageName : "NULL");
+        }
     }
     printf("---\n");
 }

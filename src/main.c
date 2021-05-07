@@ -21,17 +21,27 @@ void RBT_printReverseIndexTreeNode(RBT *h) {
     puts("]");
 }
 
+void RBT_printPagesTreeNode(RBT *h) {
+    printf("Node: '%s' -> ", h->key);
+    Page_print(h->value);
+}
+
 int main(int argc, char **argv) {
     char *fileSource = argv[1];
-    RBT *tree = NULL;
+    RBT *wordsTree = NULL;
 
-    readData(fileSource, &tree);
+    RBT *pagesTree = readData(fileSource, &wordsTree);
     puts("Words Tree:");
-    RBT_runOnAll_inOrder(tree, RBT_printReverseIndexTreeNode);
+    RBT_runOnAll_inOrder(wordsTree, RBT_printReverseIndexTreeNode);
+    // puts("Pages Tree:");
+    // RBT_runOnAll_inOrder(pagesTree, RBT_printPagesTreeNode);
 
-    // readGraph(fileSource, tree);
+    readGraph(fileSource, pagesTree);
 
-    RBT_freeReverseIndexTree(tree);
+    puts("Pages Tree after grafada braba:");
+    RBT_runOnAll_inOrder(pagesTree, RBT_printPagesTreeNode);
+
+    RBT_freeReverseIndexTree(wordsTree);
 
     // Node *pageNode = pageList->head;
     // printf("Vou printar as paginas\n");
