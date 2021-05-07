@@ -14,6 +14,7 @@ typedef struct linked_node_t {
 typedef struct list_t {
     linked_node_t* head;
     linked_node_t* tail;
+    unsigned int count;
 } list_t;
 
 list_t* list_init();

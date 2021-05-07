@@ -8,6 +8,7 @@ list_t *list_init() {
     }
     newList->head = NULL;
     newList->tail = NULL;
+    newList->count = 0;
 
     return newList;
 }
@@ -26,6 +27,8 @@ void list_push(list_t *list, void *item) {
         exit(1);
     }
 
+    list->count++;
+
     newNode->value = item;
     newNode->previous = NULL;
     newNode->next = list->head;
@@ -42,6 +45,8 @@ void *list_pop(list_t *list) {
     if (list->head == NULL) {
         return NULL;
     }
+
+    list->count--;
 
     void *holder = list->head->value;
     linked_node_t *destroyMe = list->head;
@@ -64,6 +69,8 @@ void list_enqueue(list_t *list, void *item) {
         perror("Allocation error: Node couldn't be created. Exiting.");
         exit(1);
     }
+
+    list->count++;
 
     newNode->value = item;
     newNode->next = NULL;
