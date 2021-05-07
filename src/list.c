@@ -31,10 +31,11 @@ void list_push(list_t *list, void *item) {
 
     newNode->value = item;
     newNode->previous = NULL;
-    newNode->next = list->head;
-    if (newNode->next != NULL) {
-        newNode->next->previous = newNode;
+    // List is not empty
+    if (list->head != NULL) {
+        list->head->previous = newNode;
     }
+    newNode->next = list->head;
     list->head = newNode;
     if (list->tail == NULL) {
         list->tail = newNode;
@@ -105,12 +106,14 @@ void pointerThingy(linked_node_t *node) {
     }
 }
 
-void list_destroy(list_t *list) {
+void list_destroy(list_t *list, char freeInnerValue) {
     if (list != NULL) {
         while (list->head != NULL) {
             linked_node_t *freeMe = list->head;
             list->head = list->head->next;
-            free(freeMe->value);
+            if (freeInnerValue > 0) {
+                free(freeMe->value);
+            }
             free(freeMe);
         }
         free(list);
@@ -119,10 +122,11 @@ void list_destroy(list_t *list) {
 
 void list_runOnAll(list_t *list, void (*visit)(linked_node_t *)) {
     if (list != NULL) {
-        while (list->head != NULL) {
-            linked_node_t *useMe = list->head;
-            list->head = list->head->next;
+        linked_node_t *useMe = list->head;
+        while (useMe != NULL) {
+            linked_node_t *useMeNext = useMe->next;
             visit(useMe);
+            useMe = useMeNext;
         }
     }
 }

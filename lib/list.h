@@ -31,6 +31,6 @@ void list_runOnAll(list_t* list, void (*visit)(linked_node_t*));
 
 void list_print(list_t* stack, const char* format);
 
-void list_destroy(list_t* list);
+void list_destroy(list_t *list, char freeInnerValue);
 
 #endif
