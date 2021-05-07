@@ -5,6 +5,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define RED (1)
+#define BLK (0)
+
 typedef struct node RBT;
 
 struct node {
@@ -15,14 +18,14 @@ struct node {
 };
 
 RBT *RBT_search(RBT *n, char *key);
-RBT *RBT_insert(RBT *h, char *key, void *val);
+RBT *RBT_insert(RBT *h, char *key, void* value, void *(*callBack)(RBT *node, void* value));
 // void RBT_free(RBT *h); // Commented out for user to supply own free function with the runOnAll helpers
 
 void RBT_runOnAll_preOrder(RBT *h, void (*visit)(RBT *));
 void RBT_runOnAll_inOrder(RBT *h, void (*visit)(RBT *));
 void RBT_runOnAll_postOrder(RBT *h, void (*visit)(RBT *));
 
-void RBT_destroy(RBT* h);
+void RBT_destroy(RBT *h);
 
 //nossas
 

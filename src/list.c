@@ -85,7 +85,6 @@ void list_print(list_t *list, const char *format) {
     for (linked_node_t *current = list->head; current != NULL; current = current->next) {
         printf(format, current->value);
     }
-    puts("");
 }
 
 void pointerThingy(linked_node_t *node) {

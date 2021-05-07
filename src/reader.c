@@ -9,25 +9,15 @@ char *strlwr(char *string) {
     return string;
 }
 
-int countLine(FILE *file) {
-    int count = 0;
-    while (!feof(file)) {
-        char *s = malloc(BUFFERSIZE * sizeof(char));
-        if (s == NULL) {
-            perror("RBT value alloc failed");
-            exit(EXIT_FAILURE);
-        }
-        size_t tamanho = BUFFERSIZE;
-        size_t nRead = getline(&s, &tamanho, file);
-        // check_getLine(nRead);
-        nRead = nRead;
-        if (nRead != EOF) {
-            count++;
-        }
-        free(s);
+void *RBT_collision_appendOnList(RBT *node, void *val) {
+    // Newly-created node
+    if (node->value == NULL) {
+        list_t *list = list_init();
+        list_push(list, val);
+        return list;
     }
-    rewind(file);
-    return count;
+    list_push(node->value, val);
+    return node->value;
 }
 
 void readPage(RBT **tree, char *pageName, char *pagesFolder, RBT *stopwords) {
@@ -55,14 +45,20 @@ void readPage(RBT **tree, char *pageName, char *pagesFolder, RBT *stopwords) {
         if (wordBuffer[len - 1] == '\n') {
             wordBuffer[len - 1] = '\0';
         }
-        // For each trimmed word
-        char *trimmed;
-        for (trimmed = strtok(wordBuffer, delimiters); trimmed != NULL; trimmed = strtok(NULL, delimiters)) {
-            trimmed = strlwr(trimmed);
+        // For each keyword
+        char *trimmedKeyword;
+        for (trimmedKeyword = strtok(wordBuffer, delimiters); trimmedKeyword != NULL; trimmedKeyword = strtok(NULL, delimiters)) {
+            char *treatedKeyword = strlwr(trimmedKeyword);
             // If isn't a stopword
-            if (RBT_search(stopwords, trimmed) == NULL) {
+            if (RBT_search(stopwords, treatedKeyword) == NULL) {
+                // Start new list and push pageName on it
+                char *dupStr = strdup(pageName);
+                if (dupStr == NULL) {
+                    perror("Not enough memory to insert page name on wordTree");
+                    exit(EXIT_FAILURE);
+                }
                 // Insert on tree
-                *tree = RBT_insert(*tree, trimmed, pageName);
+                *tree = RBT_insert(*tree, treatedKeyword, dupStr, RBT_collision_appendOnList);
             }
         }
     }
@@ -70,18 +66,12 @@ void readPage(RBT **tree, char *pageName, char *pagesFolder, RBT *stopwords) {
     free(wordBuffer);
 }
 
-void RBT_printReverseIndexTreeValues(RBT *h) {
-    printf("'%s' ", h->key);
-}
-
-void RBT_printReverseIndexTreeNode(RBT *h) {
-    printf("Node: '%s' -> [", h->key);
-    RBT_runOnAll_inOrder(h->value, RBT_printReverseIndexTreeValues);
-    puts("]");
-}
-
 void RBT_printStopTreeNode(RBT *h) {
     printf("Node: '%s' -> %p\n", h->key, h->value);
+}
+
+void *RBT_callback_stopWords(RBT *node, void *value) {
+    return NULL;
 }
 
 RBT *readStopsFile(RBT *tree, FILE *file) {
@@ -92,7 +82,8 @@ RBT *readStopsFile(RBT *tree, FILE *file) {
             exit(EXIT_FAILURE);
         }
         // Using RBTree as set
-        tree = RBT_insert(tree, strlwr(word), NULL);
+        // Can user collisionFn as NULL since there won't be repeated stopWords on a well-behaved input
+        tree = RBT_insert(tree, strlwr(word), NULL, RBT_callback_stopWords);
     }
     return tree;
 }
@@ -151,17 +142,17 @@ void readPages(char *fileSource, RBT **tree, RBT *stopTree) {
         }
         readPage(tree, pageName, pageFolderPath, stopTree);
     }
-    RBT_destroy(stopTree);
     fclose(indexFile);
     free(pageName);
 }
 
 void readData(char *fileSource, RBT **tree) {
     RBT *stopTree = buildStopwordsTree(fileSource);
-    readPages(fileSource, tree, stopTree);
+    // puts("Stopwords Tree:");
+    // RBT_runOnAll_inOrder(stopTree, RBT_printStopTreeNode);
 
-    puts("Tree:");
-    RBT_runOnAll_inOrder(*tree, RBT_printReverseIndexTreeNode);
+    readPages(fileSource, tree, stopTree);
+    RBT_destroy(stopTree);
 }
 
 /**
