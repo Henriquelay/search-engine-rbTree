@@ -10,7 +10,7 @@
 #include "list.h"
 #include "page.h"
 
-void readData(char* folderName, RBT** tree);
-// list_t* readGraph(char* filesource);
+RBT* readData(char* folderName, RBT** tree);
+void readGraph(char* filesource, RBT* tree);
 
 #endif // !DATA_H_#

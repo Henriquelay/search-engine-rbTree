@@ -9,24 +9,25 @@ char *strlwr(char *string) {
     return string;
 }
 
-int countLine(FILE *file) {
-    int count = 0;
-    while (!feof(file)) {
-        char *s = malloc(BUFFERSIZE * sizeof(char));
-        size_t tamanho = BUFFERSIZE;
-        size_t nRead = getline(&s, &tamanho, file);
-        // check_getLine(nRead);
-        nRead = nRead;
-        if (nRead != EOF) {
-            count++;
-        }
-        free(s);
+void *RBT_collision_appendOnList(RBT *node, void *val) {
+    // Newly-created node
+    if (node->value == NULL) {
+        list_t *list = list_init();
+        list_push(list, val);
+        return list;
     }
-    rewind(file);
-    return count;
+    list_push(node->value, val);
+    return node->value;
 }
 
-void readPage(RBT **tree, char *pageName, char *pagesFolder, RBT *stopwords) {
+void *RBT_collision_createPage(RBT *node, void *val) {
+    if (node->value == NULL) {
+        return Page_init(val);
+    }
+    return node->value;
+}
+
+void readPage(RBT **tree, char *pageName, char *pagesFolder, RBT *stopwords, RBT **pagesTree) {
     // Reading the page file:
     // Buiding pageFile path
     char filePath[strlen(pageName) + strlen(pagesFolder) + 1];
@@ -35,7 +36,7 @@ void readPage(RBT **tree, char *pageName, char *pagesFolder, RBT *stopwords) {
 
     char *wordBuffer = NULL;
     size_t wordBufferSize = 0;
-    // '\n' delimiter is already treated by using getline
+    // '\n' delimiter is already treated by outer function
     char delimiters[] = {' ', '\t', '\0'};
 
     FILE *pageFile = fopen(filePath, "r");
@@ -46,12 +47,26 @@ void readPage(RBT **tree, char *pageName, char *pagesFolder, RBT *stopwords) {
     }
     // For each line
     while (getline(&wordBuffer, &wordBufferSize, pageFile) != -1) {
-        // For each trimmed word
-        char *trimmed;
-        for (trimmed = strtok(wordBuffer, delimiters); trimmed != NULL; trimmed = strtok(NULL, delimiters)) {
-            trimmed = strlwr(trimmed);
-            if (RBT_search(stopwords, trimmed) == NULL) {
-                *tree = RBT_insert(*tree, trimmed, pageName);
+        // Overwriting '\0' on last '\n'
+        size_t len = strlen(wordBuffer);
+        if (wordBuffer[len - 1] == '\n') {
+            wordBuffer[len - 1] = '\0';
+        }
+        // For each keyword
+        char *trimmedKeyword;
+        for (trimmedKeyword = strtok(wordBuffer, delimiters); trimmedKeyword != NULL; trimmedKeyword = strtok(NULL, delimiters)) {
+            char *treatedKeyword = strlwr(trimmedKeyword);
+            // If isn't a stopword
+            if (RBT_search(stopwords, treatedKeyword) == NULL) {
+                // Start new list and push pageName on it
+                char *dupStr = strdup(pageName);
+                if (dupStr == NULL) {
+                    perror("Not enough memory to insert page name on wordTree");
+                    exit(EXIT_FAILURE);
+                }
+                // Insert on tree
+                *tree = RBT_insert(*tree, treatedKeyword, dupStr, RBT_collision_appendOnList);
+                *pagesTree = RBT_insert(*pagesTree, dupStr, dupStr, RBT_collision_createPage);
             }
         }
     }
@@ -59,21 +74,15 @@ void readPage(RBT **tree, char *pageName, char *pagesFolder, RBT *stopwords) {
     free(wordBuffer);
 }
 
-void RBT_printReverseIndexTreeValues(RBT *h) {
-    printf("'%s' ", h->key);
-}
-
-void RBT_printReverseIndexTreeNode(RBT *h) {
-    printf("Node: '%s' -> [", h->key);
-    RBT_runOnAll_inOrder(h->value, RBT_printReverseIndexTreeValues);
-    puts("]");
-}
-
 void RBT_printStopTreeNode(RBT *h) {
     printf("Node: '%s' -> %p\n", h->key, h->value);
 }
 
-RBT *readStops(RBT *tree, FILE *file) {
+void *RBT_callback_stopWords(RBT *node, void *value) {
+    return NULL;
+}
+
+RBT *readStopsFile(RBT *tree, FILE *file) {
     char word[BUFFERSIZE];
     while (!feof(file)) {
         if (fscanf(file, "%s", word) == EOF) {
@@ -81,13 +90,13 @@ RBT *readStops(RBT *tree, FILE *file) {
             exit(EXIT_FAILURE);
         }
         // Using RBTree as set
-        tree = RBT_insert(tree, strlwr(word), NULL);
+        // Can user collisionFn as NULL since there won't be repeated stopWords on a well-behaved input
+        tree = RBT_insert(tree, strlwr(word), NULL, RBT_callback_stopWords);
     }
     return tree;
 }
 
-void readData(char *fileSource, RBT **tree) {
-    // Reading stopwords:
+RBT *buildStopwordsTree(char *fileSource) {
     // Building stopFile path
     char appendsStopword[] = "/stopwords.txt";
     char stopWordsFilePath[strlen(fileSource) + strlen(appendsStopword) + 1];
@@ -99,14 +108,15 @@ void readData(char *fileSource, RBT **tree) {
         perror(NULL);
         exit(EXIT_FAILURE);
     }
-
     // Reading stopwords from file
     RBT *stopTree = NULL;
-    stopTree = readStops(stopTree, stopsWordsFile);
+    stopTree = readStopsFile(stopTree, stopsWordsFile);
     fclose(stopsWordsFile);
+    return stopTree;
+}
 
-    // RBT_runOnAll_inOrder(stopTree, RBT_printStopTreeNode);
-
+// Also creates a tree where pages are keys, returning that to later be used by graph generation
+RBT *readPages(char *fileSource, RBT **indexTree, RBT *stopTree) {
     // Reading index
     // Building indexFile path
     char appendsIndex[] = "/index.txt";
@@ -132,68 +142,76 @@ void readData(char *fileSource, RBT **tree) {
         perror(NULL);
         exit(EXIT_FAILURE);
     }
-    // '\n' delimiter is already treated by using getline
+    RBT *pagesTree = NULL;
     // For each line
     while (getline(&pageName, &pageNameBufferSize, indexFile) != -1) {
         // Trimming trailing '\n'
         if (pageName[strlen(pageName) - 1] == '\n') {
             pageName[strlen(pageName) - 1] = '\0';
         }
-        readPage(tree, pageName, pageFolderPath, stopTree);
+        readPage(indexTree, pageName, pageFolderPath, stopTree, &pagesTree);
     }
-    RBT_destroy(stopTree);
     fclose(indexFile);
     free(pageName);
 
-    puts("Tree:");
-    RBT_runOnAll_inOrder(*tree, RBT_printReverseIndexTreeNode);
+    return pagesTree;
+}
+
+RBT *readData(char *fileSource, RBT **tree) {
+    RBT *stopTree = buildStopwordsTree(fileSource);
+    // puts("Stopwords Tree:");
+    // RBT_runOnAll_inOrder(stopTree, RBT_printStopTreeNode);
+
+    RBT *pagesTree = readPages(fileSource, tree, stopTree);
+    RBT_destroy(stopTree);
+    return pagesTree;
 }
 
 /**
  * Reads graph.txt on folder, builds the 
  * */
-list_t *readGraph(char *filesource) {
-    char appends[] = "/graph.txt";
-    char *graph_file_name = malloc(sizeof(char) * (strlen(filesource) + strlen(appends) + 1));
+void readGraph(char *filesource, RBT *tree) {
     // Building file path
-    strcpy(graph_file_name, filesource);
-    strcat(graph_file_name, "/graph.txt");
-    printf("Reading from graph file '%s'\n", graph_file_name);
+    char appends[] = "/graph.txt";
+    char graphFilePath[strlen(filesource) + strlen(appends) + 1];
+    strcpy(graphFilePath, filesource);
+    strcat(graphFilePath, "/graph.txt");
+    // printf("Reading from graph file '%s'\n", graphFilePath);
 
-    // RBT *pagesTree = NULL;
-    list_t *pagesList = list_init();
-
-    char *line = NULL;
-    size_t len = 0;
-    FILE *graph_file = fopen(graph_file_name, "r");
-    if (graph_file == NULL) {
-        fprintf(stderr, "Error opening file '%s'", graph_file_name);
+    FILE *graphFile = fopen(graphFilePath, "r");
+    if (graphFile == NULL) {
+        fprintf(stderr, "Error opening file '%s'", graphFilePath);
         perror(NULL);
         exit(EXIT_FAILURE);
     }
-    while (getline(&line, &len, graph_file) != -1) {
-        char pageName[BUFFERSIZE];
-        int numberOfLinks;
-        int numberOfReadChars;
-        sscanf(line, "%s %d%n", pageName, &numberOfLinks, &numberOfReadChars);
 
-        // Dislocating line to beggining of links array
-        line += numberOfReadChars;
-
-        char currentFileLink[BUFFERSIZE];
-        for (unsigned int i = 0; i < numberOfLinks; i++) {
-            sscanf(line, " %s", currentFileLink);
-            printf("Arquivo lido: %s\n", currentFileLink);
+    char *lineBuffer = NULL;
+    size_t lineBufferSize = 0;
+    while (getline(&lineBuffer, &lineBufferSize, graphFile) != -1) {
+        // Trimming trailing '\n'
+        if (lineBuffer[strlen(lineBuffer) - 1] == '\n') {
+            lineBuffer[strlen(lineBuffer) - 1] = '\0';
         }
-        // Page *thisPage = initializePage(pageName, -1, numberOfLinks, linkedPages);
-        // pagesTree = GraphNode_insert(
-        //     pagesTree, thisPage->pageName, thisPage, 1, copyPage);
-        // Page *thisPageInNodeRef = pagesTree->data;
-        // if (thisPage != thisPageInNodeRef) {
-        //     freePage(thisPage, 0);
-        // }
-        // addTail(pagesList, thisPageInNodeRef);
-    }
+        // Missing a LOT of safety-checking past this comment
+        char *pageName = strtok(lineBuffer, " ");
+        // Unsigned would be better, but would have to mess with strtoul()
+        int numberOfLinks = atoi(strtok(NULL, " "));
 
-    return pagesList;
+        Page *page = RBT_search(tree, pageName)->value;
+
+        // printf("Loaded up page '%s':\n", pageName);
+        // Page_print(page);
+
+        page->outPagesCount = numberOfLinks;
+        Page **outPages = malloc(sizeof *outPages * numberOfLinks);
+        page->outPages = outPages;
+
+        for (unsigned int i = 0; i < numberOfLinks; i++) {
+            char *linksTo = strtok(NULL, " ");
+            page->outPages[i] = RBT_search(tree, linksTo)->value;
+            list_push(page->outPages[i]->inPages, page);
+        }
+    }
+    fclose(graphFile);
+    free(lineBuffer);
 }

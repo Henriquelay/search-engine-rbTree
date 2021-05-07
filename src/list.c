@@ -8,6 +8,7 @@ list_t *list_init() {
     }
     newList->head = NULL;
     newList->tail = NULL;
+    newList->count = 0;
 
     return newList;
 }
@@ -26,12 +27,15 @@ void list_push(list_t *list, void *item) {
         exit(1);
     }
 
+    list->count++;
+
     newNode->value = item;
     newNode->previous = NULL;
-    newNode->next = list->head;
-    if (newNode->next != NULL) {
-        newNode->next->previous = newNode;
+    // List is not empty
+    if (list->head != NULL) {
+        list->head->previous = newNode;
     }
+    newNode->next = list->head;
     list->head = newNode;
     if (list->tail == NULL) {
         list->tail = newNode;
@@ -42,6 +46,8 @@ void *list_pop(list_t *list) {
     if (list->head == NULL) {
         return NULL;
     }
+
+    list->count--;
 
     void *holder = list->head->value;
     linked_node_t *destroyMe = list->head;
@@ -65,6 +71,8 @@ void list_enqueue(list_t *list, void *item) {
         exit(1);
     }
 
+    list->count++;
+
     newNode->value = item;
     newNode->next = NULL;
     newNode->previous = list->tail;
@@ -85,7 +93,6 @@ void list_print(list_t *list, const char *format) {
     for (linked_node_t *current = list->head; current != NULL; current = current->next) {
         printf(format, current->value);
     }
-    puts("");
 }
 
 void pointerThingy(linked_node_t *node) {
@@ -99,12 +106,14 @@ void pointerThingy(linked_node_t *node) {
     }
 }
 
-void list_destroy(list_t *list) {
+void list_destroy(list_t *list, char freeInnerValue) {
     if (list != NULL) {
         while (list->head != NULL) {
             linked_node_t *freeMe = list->head;
             list->head = list->head->next;
-            free(freeMe->value);
+            if (freeInnerValue > 0) {
+                free(freeMe->value);
+            }
             free(freeMe);
         }
         free(list);
@@ -113,10 +122,11 @@ void list_destroy(list_t *list) {
 
 void list_runOnAll(list_t *list, void (*visit)(linked_node_t *)) {
     if (list != NULL) {
-        while (list->head != NULL) {
-            linked_node_t *useMe = list->head;
-            list->head = list->head->next;
+        linked_node_t *useMe = list->head;
+        while (useMe != NULL) {
+            linked_node_t *useMeNext = useMe->next;
             visit(useMe);
+            useMe = useMeNext;
         }
     }
 }

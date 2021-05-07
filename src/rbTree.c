@@ -17,7 +17,7 @@ RBT *RBT_search(RBT *n, char *key) {
 int is_red(RBT *x) {
     if (x == NULL)
         return 0;
-    return x->color; //RED == 1
+    return x->color == RED; //RED == 1
 }
 
 RBT *RBT_rotate_left(RBT *h) {
@@ -25,7 +25,7 @@ RBT *RBT_rotate_left(RBT *h) {
     h->r = x->l;
     x->l = h;
     x->color = x->l->color;
-    x->l->color = 1; //vermelho
+    x->l->color = RED; //vermelho
     return x;
 }
 
@@ -34,52 +34,47 @@ RBT *RBT_rotate_right(RBT *h) {
     h->l = x->r;
     x->r = h;
     x->color = x->r->color;
-    x->r->color = 1;
+    x->r->color = RED;
     return x;
 }
 
 void RBT_flip_colors(RBT *h) {
-    h->color = 1;
-    h->l->color = 0;
-    h->r->color = 0;
+    h->color = RED;
+    h->l->color = BLK;
+    h->r->color = BLK;
 }
 
-RBT *create_values(void *val, char color) {
-    // Won't create values if NULL is passed on insert
-    if (val == NULL) {
-        return NULL;
+RBT *create_node(char *key, char color, void* value, void *(*callBack)(RBT *node, void* value)) {
+    RBT *new = malloc(sizeof(RBT));
+    if (new == NULL) {
+        perror("RBT node alloc failed");
+        exit(EXIT_FAILURE);
     }
-    RBT *new = malloc(sizeof(RBT));
-    new->key = strdup(val);
-    new->value = NULL;
-    new->color = color;
-    new->l = new->r = NULL;
-    return new;
-}
-
-RBT *create_node(char *key, void *val, char color) {
-    RBT *new = malloc(sizeof(RBT));
     new->key = strdup(key);
-    new->value = create_values(val, 1);
     new->color = color;
     new->l = new->r = NULL;
+    new->value = NULL;
+    new->value = callBack(new, value);
     return new;
 }
 
-RBT *RBT_insert(RBT *h, char *key, void *val) {
+/* CollisionFn should return h->value after updating it, in case of collision.
+ * node->value will be set as NULL for newly-created nodes, and should return initial value.
+ * */
+RBT *RBT_insert(RBT *h, char *key, void* value, void *(*callBack)(RBT *node, void* value)) {
     // Insert at bottom and color it red.
     if (h == NULL) {
-        return create_node(key, val, 1);
+        return create_node(key, RED, value, callBack);
     }
 
     int cmp = strcmp(key, h->key);
     if (cmp < 0) {
-        h->l = RBT_insert(h->l, key, val);
+        h->l = RBT_insert(h->l, key, value, callBack);
     } else if (cmp > 0) {
-        h->r = RBT_insert(h->r, key, val);
+        h->r = RBT_insert(h->r, key, value, callBack);
     } else /*cmp == 0*/ {
         // Updating
-        h->value = RBT_insert(h->value, val, NULL);
+        h->value = callBack(h, value);
     }
     // Lean left.
     if (is_red(h->r) && !is_red(h->l)) {
@@ -128,6 +123,6 @@ void RBT_freeFunction(RBT *h) {
 }
 
 // Only frees keys
-void RBT_destroy(RBT* h) {
+void RBT_destroy(RBT *h) {
     RBT_runOnAll_postOrder(h, RBT_freeFunction);
 }
