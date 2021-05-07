@@ -1,26 +1,33 @@
 #include "../lib/page.h"
 
-Page *Page_init(char *pageName, float powerRank, int nOutLinks, Page **listPages) {
+Page *Page_init(char *pageName) {
     Page *page = malloc(sizeof(Page));
+    if (page == NULL) {
+        perror("Page allocation failed");
+        exit(EXIT_FAILURE);
+    }
     page->pageName = strdup(pageName);
-    page->powerRank = powerRank;
-    page->nOutLinks = nOutLinks;
-    page->listPages = listPages;
+    page->pageRankPrev = -1;
+    page->pageRank = -1;
+    page->nOutLinks = 0;
+    page->outPages = NULL;
+    page->nInLinks = 0;
+    page->inPages = NULL;
     return page;
 }
 
 void Page_copy(void *pageDest, void *pageSrc) {
     Page *castedDestPage = (Page *)pageDest;
     Page *castedSrcPage = (Page *)pageSrc;
-    castedDestPage->listPages = castedSrcPage->listPages;
-    castedDestPage->powerRank = castedSrcPage->powerRank;
+    castedDestPage->outPages = castedSrcPage->outPages;
+    castedDestPage->pageRank = castedSrcPage->pageRank;
     castedDestPage->nOutLinks = castedSrcPage->nOutLinks;
 }
 
 void Page_destroy(Page *page, int freeLinkedPages) {
     free(page->pageName);
     if (freeLinkedPages) {
-        free(page->listPages);
+        free(page->outPages);
     }
     free(page);
 }
@@ -33,12 +40,12 @@ void Page_print(Page *page) {
     printf("printPage\n");
     printf("Name: '%s'\n", page->pageName);
     puts(page->pageName);
-    printf("Page Rank: %lf\n", page->powerRank);
+    printf("Page Rank: %lf\n", page->pageRank);
     printf("O num link out: %d\n", page->nOutLinks);
     for (int i = 0; i < page->nOutLinks; i++) {
         printf(
             "Link %d points to '%s'\n",
-            i, page->listPages[i] ? page->listPages[i]->pageName : "NULL");
+            i, page->outPages[i] ? page->outPages[i]->pageName : "NULL");
     }
     printf("---\n");
 }

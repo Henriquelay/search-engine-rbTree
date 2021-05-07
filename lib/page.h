@@ -9,12 +9,17 @@
 typedef struct page Page;
 struct page {
     char *pageName;
-    float powerRank;
+    float pageRankPrev;
+    float pageRank;
+
     int nOutLinks;
-    Page **listPages;
+    Page **outPages;
+
+    int nInLinks;
+    Page **inPages;
 };
 
-Page *Page_init(char *pageName, float powerRank, int nOutLinks, Page **listPages);
+Page *Page_init(char *pageName);
 
 void Page_copy(void *pageDest, void *pageSrc);
 
