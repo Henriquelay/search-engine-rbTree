@@ -18,7 +18,7 @@ int main(int argc, char **argv) {
     char *fileSource = argv[1];
     RBT *tree = NULL;
     readData(fileSource, &tree);
-    // readGraph(fileSource);
+    // readGraph(fileSource, tree);
 
     RBT_freeReverseIndexTree(tree);
 

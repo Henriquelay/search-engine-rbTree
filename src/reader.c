@@ -13,6 +13,10 @@ int countLine(FILE *file) {
     int count = 0;
     while (!feof(file)) {
         char *s = malloc(BUFFERSIZE * sizeof(char));
+        if (s == NULL) {
+            perror("RBT value alloc failed");
+            exit(EXIT_FAILURE);
+        }
         size_t tamanho = BUFFERSIZE;
         size_t nRead = getline(&s, &tamanho, file);
         // check_getLine(nRead);
@@ -46,11 +50,18 @@ void readPage(RBT **tree, char *pageName, char *pagesFolder, RBT *stopwords) {
     }
     // For each line
     while (getline(&wordBuffer, &wordBufferSize, pageFile) != -1) {
+        // Overwriting '\0' on last '\n'
+        size_t len = strlen(wordBuffer);
+        if (wordBuffer[len - 1] == '\n') {
+            wordBuffer[len - 1] = '\0';
+        }
         // For each trimmed word
         char *trimmed;
         for (trimmed = strtok(wordBuffer, delimiters); trimmed != NULL; trimmed = strtok(NULL, delimiters)) {
             trimmed = strlwr(trimmed);
+            // If isn't a stopword
             if (RBT_search(stopwords, trimmed) == NULL) {
+                // Insert on tree
                 *tree = RBT_insert(*tree, trimmed, pageName);
             }
         }
@@ -86,7 +97,7 @@ RBT *readStopsFile(RBT *tree, FILE *file) {
     return tree;
 }
 
-RBT *buildStopwordsTree(char* fileSource) {
+RBT *buildStopwordsTree(char *fileSource) {
     // Building stopFile path
     char appendsStopword[] = "/stopwords.txt";
     char stopWordsFilePath[strlen(fileSource) + strlen(appendsStopword) + 1];
@@ -105,7 +116,7 @@ RBT *buildStopwordsTree(char* fileSource) {
     return stopTree;
 }
 
-void readPages(char* fileSource, RBT **tree, RBT* stopTree) {
+void readPages(char *fileSource, RBT **tree, RBT *stopTree) {
     // Reading index
     // Building indexFile path
     char appendsIndex[] = "/index.txt";
@@ -146,7 +157,7 @@ void readPages(char* fileSource, RBT **tree, RBT* stopTree) {
 }
 
 void readData(char *fileSource, RBT **tree) {
-    RBT* stopTree = buildStopwordsTree(fileSource);
+    RBT *stopTree = buildStopwordsTree(fileSource);
     readPages(fileSource, tree, stopTree);
 
     puts("Tree:");
@@ -156,37 +167,34 @@ void readData(char *fileSource, RBT **tree) {
 /**
  * Reads graph.txt on folder, builds the 
  * */
-list_t *readGraph(char *filesource) {
-    char appends[] = "/graph.txt";
-    char *graph_file_name = malloc(sizeof(char) * (strlen(filesource) + strlen(appends) + 1));
+RBT *readGraph(char *filesource, RBT *tree) {
     // Building file path
-    strcpy(graph_file_name, filesource);
-    strcat(graph_file_name, "/graph.txt");
-    printf("Reading from graph file '%s'\n", graph_file_name);
+    char appends[] = "/graph.txt";
+    char graphFilePath[strlen(filesource) + strlen(appends) + 1];
+    strcpy(graphFilePath, filesource);
+    strcat(graphFilePath, "/graph.txt");
+    printf("Reading from graph file '%s'\n", graphFilePath);
 
-    // RBT *pagesTree = NULL;
-    list_t *pagesList = list_init();
-
-    char *line = NULL;
-    size_t len = 0;
-    FILE *graph_file = fopen(graph_file_name, "r");
-    if (graph_file == NULL) {
-        fprintf(stderr, "Error opening file '%s'", graph_file_name);
+    FILE *graphFile = fopen(graphFilePath, "r");
+    if (graphFile == NULL) {
+        fprintf(stderr, "Error opening file '%s'", graphFilePath);
         perror(NULL);
         exit(EXIT_FAILURE);
     }
-    while (getline(&line, &len, graph_file) != -1) {
+    char *lineBuffer = NULL;
+    size_t lineBufferSize = 0;
+    while (getline(&lineBuffer, &lineBufferSize, graphFile) != -1) {
         char pageName[BUFFERSIZE];
         int numberOfLinks;
         int numberOfReadChars;
-        sscanf(line, "%s %d%n", pageName, &numberOfLinks, &numberOfReadChars);
+        sscanf(lineBuffer, "%s %d%n", pageName, &numberOfLinks, &numberOfReadChars);
 
         // Dislocating line to beggining of links array
-        line += numberOfReadChars;
+        lineBuffer += numberOfReadChars;
 
         char currentFileLink[BUFFERSIZE];
         for (unsigned int i = 0; i < numberOfLinks; i++) {
-            sscanf(line, " %s", currentFileLink);
+            sscanf(lineBuffer, " %s", currentFileLink);
             printf("Arquivo lido: %s\n", currentFileLink);
         }
         // Page *thisPage = initializePage(pageName, -1, numberOfLinks, linkedPages);
@@ -199,5 +207,5 @@ list_t *readGraph(char *filesource) {
         // addTail(pagesList, thisPageInNodeRef);
     }
 
-    return pagesList;
+    return NULL;
 }

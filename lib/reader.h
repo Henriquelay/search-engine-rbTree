@@ -11,6 +11,6 @@
 #include "page.h"
 
 void readData(char* folderName, RBT** tree);
-// list_t* readGraph(char* filesource);
+RBT* readGraph(char* filesource, RBT* tree);
 
 #endif // !DATA_H_#

@@ -50,6 +50,10 @@ RBT *create_values(void *val, char color) {
         return NULL;
     }
     RBT *new = malloc(sizeof(RBT));
+    if (new == NULL) {
+        perror("RBT value alloc failed");
+        exit(EXIT_FAILURE);
+    }
     new->key = strdup(val);
     new->value = NULL;
     new->color = color;
@@ -59,6 +63,10 @@ RBT *create_values(void *val, char color) {
 
 RBT *create_node(char *key, void *val, char color) {
     RBT *new = malloc(sizeof(RBT));
+    if (new == NULL) {
+        perror("RBT node alloc failed");
+        exit(EXIT_FAILURE);
+    }
     new->key = strdup(key);
     new->value = create_values(val, 1);
     new->color = color;
@@ -128,6 +136,6 @@ void RBT_freeFunction(RBT *h) {
 }
 
 // Only frees keys
-void RBT_destroy(RBT* h) {
+void RBT_destroy(RBT *h) {
     RBT_runOnAll_postOrder(h, RBT_freeFunction);
 }
