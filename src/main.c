@@ -6,7 +6,7 @@ void RBT_freeReverseIndexNode(RBT *h) {
         return;
     }
     free(h->key);
-    list_destroy(h->value);
+    list_destroy(h->value, 1);
     free(h);
     h = NULL;
 }
@@ -21,11 +21,23 @@ void RBT_printReverseIndexTreeNode(RBT *h) {
     puts("]");
 }
 
+void RBT_freePagesTreeNode(RBT *h) {
+    Page_destroy(h->value);
+    free(h->key);
+    free(h);
+}
+
+void RBT_freePagesTree(RBT *h) {
+    RBT_runOnAll_postOrder(h, RBT_freePagesTreeNode);
+}
+
 void RBT_printPagesTreeNode(RBT *h) {
     printf("Node: '%s' -> ", h->key);
     Page_print(h->value);
 }
 
+// Sim a main está muito bloated. Talvez explortar pra um util.c?
+// Não juntar nas libs das bibliotecas, pq é específico pra essa solução
 int main(int argc, char **argv) {
     char *fileSource = argv[1];
     RBT *wordsTree = NULL;
@@ -38,15 +50,9 @@ int main(int argc, char **argv) {
 
     readGraph(fileSource, pagesTree);
 
-    puts("Pages Tree after grafada braba:");
+    puts("Pages TreeGraph after grafada braba:");
     RBT_runOnAll_inOrder(pagesTree, RBT_printPagesTreeNode);
 
     RBT_freeReverseIndexTree(wordsTree);
-
-    // Node *pageNode = pageList->head;
-    // printf("Vou printar as paginas\n");
-    // while (pageNode != NULL) {
-    //     printPage(pageNode->page);
-    //     pageNode = pageNode->next;
-    // }
+    RBT_freePagesTree(pagesTree);
 }

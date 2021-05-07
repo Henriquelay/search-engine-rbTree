@@ -6,13 +6,12 @@ Page *Page_init(char *pageName) {
         perror("Page allocation failed");
         exit(EXIT_FAILURE);
     }
-    page->pageName = strdup(pageName);
+    page->name = strdup(pageName);
     page->pageRankPrev = -1;
     page->pageRank = -1;
-    page->nOutLinks = 0;
+    page->outPagesCount = 0;
     page->outPages = NULL;
-    page->nInLinks = 0;
-    page->inPages = NULL;
+    page->inPages = list_init();
     return page;
 }
 
@@ -21,15 +20,18 @@ void Page_copy(void *pageDest, void *pageSrc) {
     Page *castedSrcPage = (Page *)pageSrc;
     castedDestPage->outPages = castedSrcPage->outPages;
     castedDestPage->pageRank = castedSrcPage->pageRank;
-    castedDestPage->nOutLinks = castedSrcPage->nOutLinks;
+    castedDestPage->outPagesCount = castedSrcPage->outPagesCount;
 }
 
-void Page_destroy(Page *page, int freeLinkedPages) {
-    free(page->pageName);
-    if (freeLinkedPages) {
-        free(page->outPages);
-    }
+void Page_destroy(Page *page) {
+    free(page->name);
+    free(page->outPages);
+    list_destroy(page->inPages, 0);
     free(page);
+}
+
+void Page_printNameCallBack(linked_node_t *node) {
+    printf("'%s' ", (char *)((Page *)node->value)->name);
 }
 
 void Page_print(Page *page) {
@@ -37,24 +39,21 @@ void Page_print(Page *page) {
         puts("NULL");
         return;
     }
-    printf("Name: '%s'\n", page->pageName);
+    printf("Name: '%s'\n", page->name);
     printf("PR: %lf\n", page->pageRank);
     printf("Previous PR: %lf\n", page->pageRankPrev);
-    printf("Link out #: %d\n", page->nOutLinks);
+    printf("Link out #: %d\n", page->outPagesCount);
     if (page->outPages != NULL) {
-        for (unsigned int i = 0; i < page->nOutLinks; i++) {
+        for (unsigned int i = 0; i < page->outPagesCount; i++) {
             printf(
-                "Link %d points to '%s'\n",
-                i, page->outPages[i] != NULL ? page->outPages[i]->pageName : "NULL");
+                "OutLink %d points to '%s'\n",
+                i, page->outPages[i] != NULL ? page->outPages[i]->name : "NULL");
         }
     }
-    printf("Link in #: %d\n", page->nInLinks);
+    printf("Link in #: %d\n", page->inPages->count);
     if (page->inPages != NULL) {
-        for (unsigned int i = 0; i < page->nInLinks; i++) {
-            printf(
-                "Link %d points to '%s'\n",
-                i, page->inPages[i] != NULL ? page->inPages[i]->pageName : "NULL");
-        }
+        list_runOnAll(page->inPages, Page_printNameCallBack);
+        puts("");
     }
     printf("---\n");
 }

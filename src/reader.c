@@ -176,7 +176,7 @@ void readGraph(char *filesource, RBT *tree) {
     char graphFilePath[strlen(filesource) + strlen(appends) + 1];
     strcpy(graphFilePath, filesource);
     strcat(graphFilePath, "/graph.txt");
-    printf("Reading from graph file '%s'\n", graphFilePath);
+    // printf("Reading from graph file '%s'\n", graphFilePath);
 
     FILE *graphFile = fopen(graphFilePath, "r");
     if (graphFile == NULL) {
@@ -202,13 +202,16 @@ void readGraph(char *filesource, RBT *tree) {
         // printf("Loaded up page '%s':\n", pageName);
         // Page_print(page);
 
-        page->nOutLinks = numberOfLinks;
-        Page **outPages = malloc(sizeof * outPages * numberOfLinks);
+        page->outPagesCount = numberOfLinks;
+        Page **outPages = malloc(sizeof *outPages * numberOfLinks);
         page->outPages = outPages;
 
         for (unsigned int i = 0; i < numberOfLinks; i++) {
             char *linksTo = strtok(NULL, " ");
             page->outPages[i] = RBT_search(tree, linksTo)->value;
+            list_push(page->outPages[i]->inPages, page);
         }
     }
+    fclose(graphFile);
+    free(lineBuffer);
 }
