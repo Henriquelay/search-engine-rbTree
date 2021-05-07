@@ -73,7 +73,7 @@ void RBT_printStopTreeNode(RBT *h) {
     printf("Node: '%s' -> %p\n", h->key, h->value);
 }
 
-RBT *readStops(RBT *tree, FILE *file) {
+RBT *readStopsFile(RBT *tree, FILE *file) {
     char word[BUFFERSIZE];
     while (!feof(file)) {
         if (fscanf(file, "%s", word) == EOF) {
@@ -86,8 +86,7 @@ RBT *readStops(RBT *tree, FILE *file) {
     return tree;
 }
 
-void readData(char *fileSource, RBT **tree) {
-    // Reading stopwords:
+RBT *buildStopwordsTree(char* fileSource) {
     // Building stopFile path
     char appendsStopword[] = "/stopwords.txt";
     char stopWordsFilePath[strlen(fileSource) + strlen(appendsStopword) + 1];
@@ -99,14 +98,14 @@ void readData(char *fileSource, RBT **tree) {
         perror(NULL);
         exit(EXIT_FAILURE);
     }
-
     // Reading stopwords from file
     RBT *stopTree = NULL;
-    stopTree = readStops(stopTree, stopsWordsFile);
+    stopTree = readStopsFile(stopTree, stopsWordsFile);
     fclose(stopsWordsFile);
+    return stopTree;
+}
 
-    // RBT_runOnAll_inOrder(stopTree, RBT_printStopTreeNode);
-
+void readPages(char* fileSource, RBT **tree, RBT* stopTree) {
     // Reading index
     // Building indexFile path
     char appendsIndex[] = "/index.txt";
@@ -144,6 +143,11 @@ void readData(char *fileSource, RBT **tree) {
     RBT_destroy(stopTree);
     fclose(indexFile);
     free(pageName);
+}
+
+void readData(char *fileSource, RBT **tree) {
+    RBT* stopTree = buildStopwordsTree(fileSource);
+    readPages(fileSource, tree, stopTree);
 
     puts("Tree:");
     RBT_runOnAll_inOrder(*tree, RBT_printReverseIndexTreeNode);
