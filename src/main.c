@@ -66,6 +66,6 @@ int main(int argc, char **argv){
     char teste[20] = "maca abacate";
     search(teste, wordsTree);
 
-    //RBT_freeReverseIndexTree(wordsTree);
+    RBT_freeReverseIndexTree(wordsTree);
     RBT_freePagesTree(pagesTree);
 }
