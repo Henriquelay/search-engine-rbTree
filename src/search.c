@@ -3,7 +3,6 @@
 
 //só pra passar algo pro callback
 void* placeholder(RBT *node, void *val){
-    printf("ENTREI NA PLACEHOLDER\n");
     return val;
 }
 
@@ -14,9 +13,6 @@ void RBT_free_pages_node_copia(RBT *h) {
 
 
 RBT* RBT_update_on_hit(RBT *h, RBT* l, RBT* new_tree){
-    printf("AAAAAAAA\n");
-    printf("O ponteiro da árvore tem valor %p e a outra tem nome %s\n", (void*)l, h->key);
-    printf("O ponteiro à esquerda tem valor %p\n", (void*)h->l);
     if(RBT_search(l, h->key)){
         new_tree = RBT_insert(new_tree, h->key, h->value, placeholder);
     }
@@ -85,11 +81,12 @@ void search(char* line, RBT* symbol_table){
         RBT* palavra_node = RBT_search(symbol_table, palavra);
         RBT* pages_with_palavra = (RBT *)(palavra_node->value);
         RBT* aux_tree_pointer = get_RBT_interesction(intersection_tree, pages_with_palavra);
-        RBT_runOnAll_inOrder(intersection_tree, RBT_free_pages_node_copia);
+        RBT_destroy(intersection_tree);
         intersection_tree = aux_tree_pointer;
 
         palavra = strtok(NULL, delim);
     }
     RBT_runOnAll_inOrder(intersection_tree, printa_key_RBT);
+    RBT_destroy(intersection_tree);
 
 }
