@@ -5,16 +5,16 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "(gdb) Launch",
+            "name": "Make & run",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/trab3",
-            "args": [],
+            "args": ["data"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
-            "externalConsole": false,
             "MIMode": "gdb",
+            "externalConsole": false,
             "setupCommands": [
                 {
                     "description": "Enable pretty-printing for gdb",
@@ -22,6 +22,8 @@
                     "ignoreFailures": true
                 }
             ],
+            "preLaunchTask": "C/C++: gcc build with make",
+            "miDebuggerPath": "/usr/bin/gdb",
         }
     ]
 }
