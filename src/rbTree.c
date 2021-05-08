@@ -117,12 +117,12 @@ void RBT_runOnAll_postOrder(RBT *h, void (*visit)(RBT *)) {
 
 void RBT_freeFunction(RBT *h) {
     free(h->key);
-    free(h->value);
+    //free(h->value);
     free(h);
-    h = NULL;
 }
 
 // Only frees keys
 void RBT_destroy(RBT *h) {
+    
     RBT_runOnAll_postOrder(h, RBT_freeFunction);
 }

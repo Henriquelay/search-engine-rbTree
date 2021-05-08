@@ -9,16 +9,30 @@ char *strlwr(char *string) {
     return string;
 }
 
-void *RBT_collision_appendOnList(RBT *node, void *val) {
+void* callback_ignore(RBT* node, void* value){
+    return NULL;
+}
+
+void *RBT_collision_appendOnList(RBT *node, void *val){
     // Newly-created node
-    if (node->value == NULL) {
-        list_t *list = list_init();
-        list_push(list, val);
-        return list;
+    if(node->value == NULL) {
+        RBT* new_rbt = NULL;
+        new_rbt = RBT_insert(new_rbt, val, NULL, callback_ignore);
+        return new_rbt;
     }
-    list_push(node->value, val);
+    node->value = RBT_insert(node->value, val, NULL, callback_ignore);
     return node->value;
 }
+
+void* RBT_collision_innerRBT(RBT* node, void* val){
+    return val;
+}
+
+
+void* RBT_collision_insertOnInnerRBT(RBT* node, void *val){
+    return RBT_insert(node->value, val, NULL, RBT_collision_innerRBT);
+}
+
 
 void *RBT_collision_createPage(RBT *node, void *val) {
     if (node->value == NULL) {
@@ -46,7 +60,7 @@ void readPage(RBT **tree, char *pageName, char *pagesFolder, RBT *stopwords, RBT
         exit(EXIT_FAILURE);
     }
     // For each line
-    while (getline(&wordBuffer, &wordBufferSize, pageFile) != -1) {
+    while (getline(&wordBuffer, &wordBufferSize, pageFile) != -1){
         // Overwriting '\0' on last '\n'
         size_t len = strlen(wordBuffer);
         if (wordBuffer[len - 1] == '\n') {
@@ -59,14 +73,8 @@ void readPage(RBT **tree, char *pageName, char *pagesFolder, RBT *stopwords, RBT
             // If isn't a stopword
             if (RBT_search(stopwords, treatedKeyword) == NULL) {
                 // Start new list and push pageName on it
-                char *dupStr = strdup(pageName);
-                if (dupStr == NULL) {
-                    perror("Not enough memory to insert page name on wordTree");
-                    exit(EXIT_FAILURE);
-                }
-                // Insert on tree
-                *tree = RBT_insert(*tree, treatedKeyword, dupStr, RBT_collision_appendOnList);
-                *pagesTree = RBT_insert(*pagesTree, dupStr, dupStr, RBT_collision_createPage);
+                *tree = RBT_insert(*tree, treatedKeyword, pageName, RBT_collision_insertOnInnerRBT);
+                *pagesTree = RBT_insert(*pagesTree, pageName, pageName, RBT_collision_createPage);
             }
         }
     }
@@ -206,7 +214,7 @@ void readGraph(char *filesource, RBT *tree) {
         Page **outPages = malloc(sizeof *outPages * numberOfLinks);
         page->outPages = outPages;
 
-        for (unsigned int i = 0; i < numberOfLinks; i++) {
+        for (unsigned int i = 0; i < numberOfLinks; i++){
             char *linksTo = strtok(NULL, " ");
             page->outPages[i] = RBT_search(tree, linksTo)->value;
             list_push(page->outPages[i]->inPages, page);
