@@ -4,9 +4,16 @@
 
 
 
-void RBT_printReverseIndexTreeNodeValue(RBT *h){
-    printf("'%s'\n", h->key);
+void RBT_printReverseIndexTreeNodeValue(RBT *h) {
+    printf("'%s' ", h->key);
 }
+
+
+void RBT_printReverseIndexTreeNode(RBT *h) {
+    printf("Node: '%s' -> [", h->key);
+    RBT_runOnAll_inOrder(h->value, RBT_printReverseIndexTreeNodeValue);
+    puts("]");
+}   
 
 
 void RBT_freeReverseIndexNode(RBT *h) {
@@ -22,11 +29,6 @@ void RBT_freeReverseIndexTree(RBT *tree) {
     RBT_runOnAll_postOrder(tree, RBT_freeReverseIndexNode);
 }
 
-// void RBT_printReverseIndexTreeNode(RBT *h) {
-//     printf("Node: '%s' -> [", h->key);
-//     RBT_runOnAll_inOrder(h, Page_print);
-//     puts("]");
-// }
 
 void RBT_freePagesTreeNode(RBT *h) {
     Page_destroy(h->value);
@@ -51,21 +53,14 @@ int main(int argc, char **argv){
 
     RBT *pagesTree = readData(fileSource, &wordsTree);
     puts("Words Tree:");
-    RBT_runOnAll_inOrder(wordsTree, RBT_printReverseIndexTreeNodeValue);
-    // puts("Pages Tree:");
-    // RBT_runOnAll_inOrder(pagesTree, RBT_printPagesTreeNode);
+    RBT_runOnAll_inOrder(wordsTree, RBT_printReverseIndexTreeNode);
 
     readGraph(fileSource, pagesTree);
     puts("Pages TreeGraph after grafada braba:");
     RBT_runOnAll_inOrder(pagesTree, RBT_printPagesTreeNode);
     
-    printf("ESTOU TESTANDO AAAAAAAA\n");
-    puts("Words Tree:");
-    RBT_runOnAll_inOrder(wordsTree, RBT_printReverseIndexTreeNodeValue);
     printf("############## NÃO LIGO PRA CIMA  ######################\n");
-    char teste[20] = "maca abacate";
-    search(teste, wordsTree);
-
+    print_output(wordsTree);
     RBT_freeReverseIndexTree(wordsTree);
     RBT_freePagesTree(pagesTree);
 }
