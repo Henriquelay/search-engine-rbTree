@@ -1,5 +1,8 @@
 #include "../lib/search.h"
 
+void printa_key_RBT(RBT* node){
+    printf("Chave é %s\n", node->key);
+}
 
 //só pra passar algo pro callback
 void* placeholder(RBT *node, void *val){
@@ -7,40 +10,33 @@ void* placeholder(RBT *node, void *val){
 }
 
 
-RBT* RBT_update_on_hit(RBT *h, RBT* l, RBT* new_tree){
-    if(RBT_search(l, h->key)){
-        new_tree = RBT_insert(new_tree, h->key, h->value, placeholder);
+RBT* RBT_update_on_hit(RBT *smaller_tree, RBT* bigger_tree, RBT* new_tree){
+    RBT* test;
+    if((test = RBT_search(bigger_tree, smaller_tree->key))){
+        new_tree = RBT_insert(new_tree, smaller_tree->key, smaller_tree->value, placeholder);
     }
     return new_tree;
 }
 
 
-RBT* intersection_recursion_step(RBT* h, RBT* l, RBT* aux_tree){
-    if (h != NULL){
-        aux_tree = RBT_update_on_hit(h, l, aux_tree);
-        if(h->l != NULL){
-            intersection_recursion_step(h->l, l, aux_tree);
-
-        }
-        if(h->r != NULL){
-            intersection_recursion_step(h->r, l, aux_tree);
-        }
+RBT* intersection_recursion_step(RBT* smaller_tree, RBT* bigger_tree, RBT* resulting_tree){
+    if(smaller_tree != NULL){
+        resulting_tree = RBT_update_on_hit(smaller_tree, bigger_tree, resulting_tree);
+        resulting_tree = intersection_recursion_step(smaller_tree->l, bigger_tree, resulting_tree);
+        resulting_tree = intersection_recursion_step(smaller_tree->r, bigger_tree, resulting_tree); 
     }
-    return aux_tree;
+    return resulting_tree;
 }
 
 
-RBT* get_RBT_interesction(RBT *h, RBT* l){
+RBT* get_RBT_interesction(RBT *smaller_tree, RBT* bigger_tree){
 
-    RBT* aux_tree = NULL;
-    aux_tree = intersection_recursion_step(h, l, aux_tree);
-    return aux_tree;
+    RBT* resulting_tree = NULL;
+    resulting_tree = intersection_recursion_step(smaller_tree, bigger_tree, resulting_tree);
+    return resulting_tree;
 }
 
 
-void printa_key_RBT(RBT* node){
-    printf("Chave é %s\n", node->key);
-}
 
 
 RBT* start_intersection_tree(RBT* symbol_table, char* palavra){
@@ -49,21 +45,44 @@ RBT* start_intersection_tree(RBT* symbol_table, char* palavra){
     return page_tree;
 }
 
-
+// Symbol table key: string, 
+// Symbol table val: RBT* (páginas [key: string, val: null])
 void search(char* line, RBT* symbol_table){
+    if(!line){return;}
     const char delim[2] = " ";
-    char* seach_keyword = strtok(line, delim);
-    RBT* page_intersection_tree = start_intersection_tree(symbol_table, seach_keyword);
-    seach_keyword = strtok(NULL, delim);
-    while(seach_keyword != NULL){
-        RBT* page_tree = RBT_search(symbol_table, seach_keyword)->value;
+    char* search_keyword = strtok(line, delim);
+    RBT* page_intersection_tree = start_intersection_tree(symbol_table, search_keyword);
+    
+    search_keyword = strtok(NULL, delim);
+    while(search_keyword != NULL){
+        RBT* page_tree = RBT_search(symbol_table, search_keyword)->value;
         RBT* page_tree_aux = get_RBT_interesction(page_intersection_tree, page_tree);
         RBT_destroy(page_intersection_tree);
         page_intersection_tree = page_tree_aux;
 
-        seach_keyword = strtok(NULL, delim);
+        search_keyword = strtok(NULL, delim);
     }
+    printf("#### DEBUG ####\n");
     RBT_runOnAll_inOrder(page_intersection_tree, printa_key_RBT);
+
     RBT_destroy(page_intersection_tree);
 
+}
+
+
+void print_output(RBT* symbol_table){
+    char* lineptr = NULL;
+    size_t line_buffer_size = 0;
+    ssize_t nCharacterRead;
+    while((nCharacterRead = getline(&lineptr, &line_buffer_size, stdin)) != -1){
+        printf("NUMERO LIDOS %ld\n", nCharacterRead);
+        if (lineptr[nCharacterRead - 1] == '\n') {
+            lineptr[nCharacterRead - 1] = '\0';
+        }
+        if(!(*lineptr)){continue;}
+        search(lineptr, symbol_table);
+    }
+    free(lineptr);
+
+    
 }
