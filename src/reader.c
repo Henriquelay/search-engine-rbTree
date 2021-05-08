@@ -47,6 +47,7 @@ void readPage(RBT **tree, char *pageName, char *pagesFolder, RBT *stopwords, RBT
     char filePath[strlen(pageName) + strlen(pagesFolder) + 1];
     strcpy(filePath, pagesFolder);
     strcat(filePath, pageName);
+    printf("{%s}\n",filePath);
 
     char *wordBuffer = NULL;
     size_t wordBufferSize = 0;
@@ -59,11 +60,12 @@ void readPage(RBT **tree, char *pageName, char *pagesFolder, RBT *stopwords, RBT
         perror(NULL);
         exit(EXIT_FAILURE);
     }
+
     // For each line
     while (getline(&wordBuffer, &wordBufferSize, pageFile) != -1){
         // Overwriting '\0' on last '\n'
         size_t len = strlen(wordBuffer);
-        if (wordBuffer[len - 1] == '\n') {
+        if (wordBuffer[len - 1] == '\n' ) {
             wordBuffer[len - 1] = '\0';
         }
         // For each keyword
@@ -93,7 +95,7 @@ void *RBT_callback_stopWords(RBT *node, void *value) {
 RBT *readStopsFile(RBT *tree, FILE *file) {
     char word[BUFFERSIZE];
     while (!feof(file)) {
-        if (fscanf(file, "%s", word) == EOF) {
+        if (fscanf(file, "%s\n", word) == EOF) {
             perror("Error reading stopwords");
             exit(EXIT_FAILURE);
         }
@@ -110,6 +112,7 @@ RBT *buildStopwordsTree(char *fileSource) {
     char stopWordsFilePath[strlen(fileSource) + strlen(appendsStopword) + 1];
     strcpy(stopWordsFilePath, fileSource);
     strcat(stopWordsFilePath, appendsStopword);
+    puts(stopWordsFilePath);
     FILE *stopsWordsFile = fopen(stopWordsFilePath, "r");
     if (stopsWordsFile == NULL) {
         fprintf(stderr, "Error opening file '%s'", stopWordsFilePath);

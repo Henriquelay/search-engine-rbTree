@@ -1,5 +1,6 @@
 #include "../lib/reader.h"
 #include "../lib/search.h"
+#include "../lib/pageRank.h"
 #include <stdio.h>
 
 
@@ -56,6 +57,7 @@ int main(int argc, char **argv){
     RBT_runOnAll_inOrder(wordsTree, RBT_printReverseIndexTreeNode);
 
     readGraph(fileSource, pagesTree);
+    calculate_pageRank(pagesTree);
     puts("Pages TreeGraph after grafada braba:");
     RBT_runOnAll_inOrder(pagesTree, RBT_printPagesTreeNode);
     

@@ -1,0 +1,100 @@
+0.txt 15 23.txt 84.txt 50.txt 68.txt 27.txt 36.txt 4.txt 31.txt 17.txt 91.txt 49.txt 71.txt 30.txt 66.txt 24.txt 
+1.txt 25 95.txt 67.txt 66.txt 34.txt 43.txt 38.txt 47.txt 24.txt 10.txt 37.txt 46.txt 5.txt 32.txt 9.txt 4.txt 83.txt 92.txt 64.txt 73.txt 45.txt 63.txt 12.txt 30.txt 2.txt 6.txt 
+2.txt 13 8.txt 17.txt 35.txt 30.txt 76.txt 85.txt 80.txt 48.txt 56.txt 37.txt 9.txt 84.txt 60.txt 
+3.txt 14 70.txt 88.txt 73.txt 82.txt 32.txt 27.txt 77.txt 95.txt 72.txt 53.txt 80.txt 89.txt 39.txt 20.txt 
+4.txt 23 68.txt 63.txt 90.txt 49.txt 76.txt 85.txt 53.txt 57.txt 43.txt 38.txt 19.txt 9.txt 94.txt 84.txt 70.txt 69.txt 46.txt 41.txt 18.txt 36.txt 22.txt 21.txt 7.txt 
+5.txt 19 65.txt 74.txt 60.txt 41.txt 45.txt 63.txt 40.txt 39.txt 16.txt 86.txt 72.txt 67.txt 94.txt 53.txt 75.txt 52.txt 51.txt 19.txt 97.txt 
+6.txt 21 34.txt 43.txt 70.txt 24.txt 33.txt 28.txt 18.txt 69.txt 96.txt 55.txt 64.txt 68.txt 22.txt 8.txt 39.txt 7.txt 11.txt 20.txt 81.txt 99.txt 89.txt 
+7.txt 28 96.txt 90.txt 58.txt 67.txt 85.txt 53.txt 80.txt 48.txt 66.txt 25.txt 61.txt 38.txt 15.txt 24.txt 42.txt 14.txt 74.txt 83.txt 92.txt 60.txt 78.txt 46.txt 32.txt 41.txt 45.txt 54.txt 22.txt 49.txt 
+8.txt 19 9.txt 93.txt 65.txt 83.txt 51.txt 69.txt 87.txt 73.txt 82.txt 59.txt 68.txt 31.txt 12.txt 77.txt 81.txt 94.txt 62.txt 57.txt 47.txt 
+9.txt 18 63.txt 76.txt 71.txt 15.txt 98.txt 70.txt 65.txt 92.txt 37.txt 64.txt 73.txt 23.txt 32.txt 41.txt 36.txt 13.txt 26.txt 87.txt 
+10.txt 21 30.txt 11.txt 86.txt 95.txt 81.txt 67.txt 62.txt 71.txt 66.txt 61.txt 20.txt 29.txt 56.txt 33.txt 14.txt 88.txt 69.txt 55.txt 82.txt 50.txt 59.txt 
+11.txt 17 98.txt 70.txt 79.txt 69.txt 78.txt 68.txt 18.txt 27.txt 22.txt 17.txt 30.txt 96.txt 94.txt 80.txt 39.txt 52.txt 61.txt 
+12.txt 19 86.txt 63.txt 72.txt 90.txt 58.txt 62.txt 71.txt 39.txt 48.txt 15.txt 19.txt 89.txt 83.txt 51.txt 87.txt 73.txt 41.txt 59.txt 31.txt 
+13.txt 17 83.txt 92.txt 69.txt 35.txt 86.txt 95.txt 67.txt 76.txt 62.txt 71.txt 80.txt 33.txt 19.txt 28.txt 37.txt 98.txt 93.txt 
+14.txt 13 15.txt 19.txt 93.txt 87.txt 27.txt 45.txt 30.txt 16.txt 67.txt 57.txt 61.txt 29.txt 38.txt 
+15.txt 20 21.txt 39.txt 86.txt 99.txt 76.txt 80.txt 57.txt 66.txt 34.txt 43.txt 19.txt 28.txt 32.txt 98.txt 79.txt 46.txt 55.txt 77.txt 17.txt 35.txt 
+16.txt 21 93.txt 70.txt 97.txt 56.txt 74.txt 64.txt 73.txt 50.txt 22.txt 26.txt 35.txt 21.txt 96.txt 95.txt 94.txt 44.txt 71.txt 66.txt 34.txt 61.txt 98.txt 
+17.txt 16 80.txt 48.txt 25.txt 61.txt 47.txt 24.txt 33.txt 74.txt 83.txt 51.txt 60.txt 64.txt 18.txt 40.txt 26.txt 21.txt 
+18.txt 23 44.txt 96.txt 99.txt 58.txt 67.txt 53.txt 80.txt 39.txt 52.txt 61.txt 47.txt 42.txt 84.txt 79.txt 60.txt 87.txt 46.txt 55.txt 64.txt 73.txt 36.txt 54.txt 40.txt 
+19.txt 18 98.txt 74.txt 83.txt 69.txt 78.txt 87.txt 50.txt 54.txt 35.txt 86.txt 95.txt 81.txt 99.txt 89.txt 57.txt 70.txt 56.txt 33.txt 
+20.txt 12 95.txt 85.txt 53.txt 89.txt 66.txt 34.txt 23.txt 69.txt 55.txt 41.txt 35.txt 44.txt 
+21.txt 18 55.txt 41.txt 59.txt 27.txt 36.txt 45.txt 22.txt 26.txt 82.txt 77.txt 86.txt 53.txt 25.txt 52.txt 47.txt 23.txt 56.txt 87.txt 
+22.txt 18 27.txt 78.txt 55.txt 82.txt 50.txt 63.txt 35.txt 53.txt 99.txt 62.txt 48.txt 57.txt 66.txt 84.txt 34.txt 52.txt 29.txt 65.txt 
+23.txt 13 67.txt 89.txt 43.txt 24.txt 37.txt 70.txt 79.txt 87.txt 55.txt 68.txt 45.txt 63.txt 26.txt 
+24.txt 18 65.txt 92.txt 78.txt 73.txt 40.txt 26.txt 35.txt 44.txt 25.txt 77.txt 89.txt 34.txt 38.txt 56.txt 28.txt 37.txt 84.txt 93.txt 
+25.txt 14 34.txt 52.txt 61.txt 38.txt 42.txt 75.txt 93.txt 87.txt 46.txt 36.txt 54.txt 31.txt 44.txt 80.txt 
+26.txt 17 86.txt 72.txt 76.txt 85.txt 94.txt 66.txt 75.txt 84.txt 29.txt 47.txt 65.txt 74.txt 78.txt 55.txt 77.txt 36.txt 40.txt 
+27.txt 11 60.txt 77.txt 58.txt 53.txt 62.txt 80.txt 98.txt 52.txt 29.txt 42.txt 37.txt 
+28.txt 13 85.txt 71.txt 48.txt 75.txt 61.txt 29.txt 37.txt 98.txt 97.txt 74.txt 46.txt 64.txt 50.txt 
+29.txt 10 59.txt 63.txt 31.txt 44.txt 67.txt 76.txt 89.txt 37.txt 74.txt 92.txt 
+30.txt 13 84.txt 74.txt 60.txt 68.txt 54.txt 63.txt 44.txt 99.txt 94.txt 62.txt 89.txt 75.txt 32.txt 
+31.txt 15 86.txt 81.txt 90.txt 85.txt 94.txt 89.txt 84.txt 61.txt 33.txt 51.txt 93.txt 82.txt 45.txt 40.txt 49.txt 
+32.txt 6 73.txt 41.txt 50.txt 39.txt 61.txt 37.txt 
+33.txt 14 56.txt 98.txt 93.txt 69.txt 55.txt 73.txt 41.txt 36.txt 99.txt 58.txt 53.txt 48.txt 66.txt 75.txt 
+34.txt 11 91.txt 81.txt 89.txt 47.txt 37.txt 93.txt 83.txt 78.txt 96.txt 45.txt 35.txt 
+35.txt 11 92.txt 60.txt 69.txt 78.txt 87.txt 73.txt 57.txt 47.txt 56.txt 98.txt 79.txt 
+36.txt 13 62.txt 48.txt 57.txt 61.txt 37.txt 93.txt 92.txt 78.txt 64.txt 54.txt 95.txt 72.txt 85.txt 
+37.txt 11 72.txt 99.txt 94.txt 62.txt 39.txt 48.txt 66.txt 75.txt 61.txt 87.txt 68.txt 
+38.txt 16 98.txt 79.txt 97.txt 92.txt 60.txt 69.txt 50.txt 68.txt 63.txt 99.txt 67.txt 85.txt 44.txt 39.txt 56.txt 42.txt 
+39.txt 11 85.txt 66.txt 42.txt 97.txt 83.txt 69.txt 50.txt 59.txt 77.txt 67.txt 53.txt 
+40.txt 13 50.txt 77.txt 91.txt 67.txt 89.txt 70.txt 47.txt 51.txt 98.txt 97.txt 69.txt 78.txt 64.txt 
+41.txt 12 51.txt 98.txt 93.txt 73.txt 82.txt 59.txt 49.txt 44.txt 81.txt 80.txt 52.txt 61.txt 
+42.txt 7 91.txt 67.txt 94.txt 66.txt 56.txt 84.txt 78.txt 
+43.txt 12 69.txt 55.txt 73.txt 58.txt 86.txt 99.txt 71.txt 80.txt 98.txt 57.txt 84.txt 47.txt 
+44.txt 9 65.txt 78.txt 46.txt 73.txt 54.txt 86.txt 90.txt 85.txt 94.txt 
+45.txt 12 72.txt 53.txt 66.txt 61.txt 84.txt 83.txt 92.txt 87.txt 55.txt 50.txt 77.txt 49.txt 
+46.txt 12 98.txt 69.txt 82.txt 77.txt 54.txt 76.txt 85.txt 48.txt 84.txt 70.txt 47.txt 56.txt 
+47.txt 9 48.txt 84.txt 61.txt 56.txt 91.txt 50.txt 54.txt 90.txt 99.txt 
+48.txt 11 54.txt 72.txt 67.txt 71.txt 89.txt 98.txt 75.txt 52.txt 69.txt 82.txt 77.txt 
+49.txt 8 79.txt 78.txt 64.txt 81.txt 90.txt 71.txt 57.txt 56.txt 
+50.txt 4 58.txt 62.txt 78.txt 82.txt 
+51.txt 8 91.txt 77.txt 81.txt 90.txt 71.txt 66.txt 75.txt 84.txt 
+52.txt 8 98.txt 97.txt 74.txt 77.txt 86.txt 99.txt 61.txt 65.txt 
+53.txt 12 71.txt 98.txt 75.txt 56.txt 65.txt 83.txt 69.txt 87.txt 96.txt 82.txt 68.txt 77.txt 
+54.txt 3 77.txt 94.txt 80.txt 
+55.txt 12 75.txt 93.txt 79.txt 88.txt 83.txt 96.txt 82.txt 91.txt 77.txt 72.txt 85.txt 71.txt 
+56.txt 5 86.txt 93.txt 88.txt 59.txt 58.txt 
+57.txt 9 79.txt 88.txt 92.txt 96.txt 86.txt 95.txt 85.txt 89.txt 75.txt 
+58.txt 11 67.txt 80.txt 84.txt 79.txt 97.txt 74.txt 69.txt 82.txt 91.txt 59.txt 68.txt 
+59.txt 10 63.txt 96.txt 86.txt 95.txt 94.txt 62.txt 89.txt 70.txt 74.txt 78.txt 
+60.txt 3 78.txt 64.txt 89.txt 
+61.txt 5 80.txt 75.txt 87.txt 77.txt 63.txt 
+62.txt 9 87.txt 77.txt 86.txt 72.txt 81.txt 90.txt 80.txt 70.txt 65.txt 
+63.txt 9 89.txt 98.txt 84.txt 65.txt 87.txt 68.txt 86.txt 90.txt 75.txt 
+64.txt 8 95.txt 90.txt 67.txt 94.txt 71.txt 79.txt 88.txt 73.txt 
+65.txt 7 69.txt 78.txt 99.txt 89.txt 75.txt 93.txt 70.txt 
+66.txt 7 71.txt 75.txt 70.txt 93.txt 92.txt 86.txt 76.txt 
+67.txt 5 86.txt 95.txt 94.txt 79.txt 78.txt 
+68.txt 6 69.txt 78.txt 87.txt 73.txt 75.txt 84.txt 
+69.txt 4 85.txt 83.txt 92.txt 73.txt 
+70.txt 6 72.txt 71.txt 89.txt 93.txt 88.txt 92.txt 
+71.txt 6 97.txt 83.txt 87.txt 99.txt 76.txt 94.txt 
+72.txt 5 89.txt 93.txt 87.txt 73.txt 77.txt 
+73.txt 5 74.txt 77.txt 76.txt 85.txt 75.txt 
+74.txt 5 75.txt 78.txt 95.txt 90.txt 85.txt 
+75.txt 3 76.txt 78.txt 82.txt 
+76.txt 4 88.txt 87.txt 96.txt 86.txt 
+77.txt 5 89.txt 98.txt 84.txt 78.txt 91.txt 
+78.txt 6 86.txt 81.txt 90.txt 85.txt 84.txt 92.txt 
+79.txt 5 93.txt 96.txt 86.txt 81.txt 80.txt 
+80.txt 6 95.txt 85.txt 98.txt 97.txt 96.txt 86.txt 
+81.txt 3 87.txt 84.txt 93.txt 
+82.txt 3 93.txt 88.txt 94.txt 
+83.txt 3 86.txt 94.txt 97.txt 
+84.txt 4 92.txt 91.txt 86.txt 90.txt 
+85.txt 5 92.txt 86.txt 95.txt 90.txt 99.txt 
+86.txt 3 89.txt 93.txt 96.txt 
+87.txt 2 91.txt 90.txt 
+88.txt 2 99.txt 89.txt 
+89.txt 2 98.txt 92.txt 
+90.txt 1 93.txt 
+91.txt 1 92.txt 
+92.txt 3 97.txt 95.txt 93.txt 
+93.txt 0 
+94.txt 3 99.txt 98.txt 96.txt 
+95.txt 1 97.txt 
+96.txt 0 
+97.txt 0 
+98.txt 1 99.txt 
+99.txt 0 

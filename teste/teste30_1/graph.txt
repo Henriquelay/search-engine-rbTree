@@ -1,0 +1,30 @@
+0.txt 7 16.txt 25.txt 29.txt 17.txt 26.txt 1.txt 21.txt 
+1.txt 13 24.txt 8.txt 10.txt 21.txt 5.txt 16.txt 25.txt 9.txt 11.txt 4.txt 6.txt 27.txt 29.txt 
+2.txt 8 4.txt 25.txt 27.txt 17.txt 10.txt 28.txt 5.txt 23.txt 
+3.txt 10 24.txt 8.txt 26.txt 19.txt 28.txt 14.txt 7.txt 16.txt 9.txt 11.txt 
+4.txt 11 9.txt 23.txt 25.txt 11.txt 20.txt 24.txt 17.txt 26.txt 28.txt 21.txt 16.txt 
+5.txt 7 19.txt 14.txt 6.txt 27.txt 22.txt 15.txt 26.txt 
+6.txt 9 18.txt 29.txt 26.txt 10.txt 19.txt 28.txt 12.txt 14.txt 7.txt 
+7.txt 10 26.txt 19.txt 25.txt 18.txt 27.txt 20.txt 29.txt 13.txt 22.txt 8.txt 
+8.txt 7 11.txt 27.txt 15.txt 24.txt 10.txt 19.txt 23.txt 
+9.txt 5 19.txt 16.txt 27.txt 20.txt 13.txt 
+10.txt 10 27.txt 20.txt 22.txt 17.txt 14.txt 23.txt 16.txt 18.txt 11.txt 13.txt 
+11.txt 6 14.txt 18.txt 20.txt 29.txt 28.txt 12.txt 
+12.txt 2 26.txt 19.txt 
+13.txt 6 17.txt 19.txt 14.txt 23.txt 27.txt 22.txt 
+14.txt 7 15.txt 24.txt 17.txt 19.txt 28.txt 27.txt 29.txt 
+15.txt 5 21.txt 18.txt 20.txt 24.txt 17.txt 
+16.txt 8 20.txt 24.txt 26.txt 19.txt 21.txt 23.txt 25.txt 18.txt 
+17.txt 6 23.txt 18.txt 20.txt 29.txt 22.txt 26.txt 
+18.txt 4 28.txt 27.txt 20.txt 24.txt 
+19.txt 8 27.txt 20.txt 29.txt 22.txt 24.txt 28.txt 21.txt 25.txt 
+20.txt 1 24.txt 
+21.txt 3 29.txt 28.txt 23.txt 
+22.txt 1 23.txt 
+23.txt 1 29.txt 
+24.txt 1 25.txt 
+25.txt 3 27.txt 29.txt 26.txt 
+26.txt 3 27.txt 29.txt 28.txt 
+27.txt 1 28.txt 
+28.txt 0 
+29.txt 0 
