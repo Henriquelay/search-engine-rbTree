@@ -119,7 +119,6 @@ void RBT_freeFunction(RBT *h) {
     free(h->key);
     free(h->value);
     free(h);
-    h = NULL;
 }
 
 // Only frees keys

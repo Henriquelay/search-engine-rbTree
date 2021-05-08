@@ -6,18 +6,21 @@ void RBT_freeReverseIndexNode(RBT *h) {
         return;
     }
     free(h->key);
-    list_destroy(h->value, 1);
+    RBT_destroy(h->value);
     free(h);
-    h = NULL;
 }
 
 void RBT_freeReverseIndexTree(RBT *tree) {
     RBT_runOnAll_postOrder(tree, RBT_freeReverseIndexNode);
 }
 
+void RBT_printReverseIndexTreeNodeValue(RBT *h) {
+    printf("'%s' ", h->key);
+}
+
 void RBT_printReverseIndexTreeNode(RBT *h) {
     printf("Node: '%s' -> [", h->key);
-    list_print(h->value, "'%s' ");
+    RBT_runOnAll_inOrder(h->value, RBT_printReverseIndexTreeNodeValue);
     puts("]");
 }
 
