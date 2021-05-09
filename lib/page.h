@@ -27,4 +27,6 @@ void Page_destroy(Page *page);
 
 void Page_print(Page *page);
 
+int Page_cmp(const void*, const void *);
+
 #endif
