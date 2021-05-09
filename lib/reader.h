@@ -12,5 +12,6 @@
 
 RBT* readData(char* folderName, RBT** tree);
 void readGraph(char* filesource, RBT* tree);
+char *strlwr(char *string);
 
 #endif // !DATA_H_#
