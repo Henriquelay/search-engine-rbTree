@@ -53,8 +53,6 @@ int main(int argc, char **argv){
     RBT *wordsTree = NULL;
 
     RBT *pagesTree = readData(fileSource, &wordsTree);
-    puts("Words Tree:");
-    RBT_runOnAll_inOrder(wordsTree, RBT_printReverseIndexTreeNode);
 
     readGraph(fileSource, pagesTree);
     calculate_pageRank(pagesTree);
@@ -62,7 +60,6 @@ int main(int argc, char **argv){
     // puts("Pages TreeGraph after grafada braba:");
     // RBT_runOnAll_inOrder(pagesTree, RBT_printPagesTreeNode);
     
-    printf("############## NÃO LIGO PRA CIMA  ######################\n");
     print_output(wordsTree, pagesTree);
     RBT_freeReverseIndexTree(wordsTree);
     RBT_freePagesTree(pagesTree);
