@@ -92,23 +92,32 @@ void print_output(RBT* symbol_table, RBT* page_graph){
     size_t line_buffer_size = 0;
     ssize_t nCharacterRead;
     while((nCharacterRead = getline(&lineptr, &line_buffer_size, stdin)) != -1){
-        printf("NUMERO LIDOS %ld\n", nCharacterRead);
         if (lineptr[nCharacterRead - 1] == '\n') {
             lineptr[nCharacterRead - 1] = '\0';
         }
         if(!(*lineptr)){continue;}
         // puts(lineptr);
+        lineptr = strlwr(lineptr);
         RBT* page_intersection_tree = search(lineptr, symbol_table);
         if(page_intersection_tree){
-            RBT_runOnAll_inOrder(page_intersection_tree, printa_key_RBT);
             int array_size = -1;
             Page** page_array = RBT_value_to_array(page_intersection_tree, &array_size, page_graph);
-            printf("Funciona pf nunca te pedi nada\n");
-            printf("array_size: %d\n", array_size);
-            for(int i=0; i<array_size; i++){
-                printf("A página %d do array tem nome %s\n", i, page_array[i]->name);
+            qsort(page_array, array_size, sizeof(Page*), Page_cmp);
+            
+            // colocar numa função/macro pelo amor de krishna
+            for(int i=0; i<array_size -1; i++){
+                printf("%s ", page_array[i]->name);
             }
+            printf("%s", page_array[array_size-1]->name);
+            printf("\n");
+            for(int i=0; i<array_size -1; i++){
+                printf("%lf ", page_array[i]->pageRank);
+            }
+            printf("%lf", page_array[array_size-1]->pageRank);
+            printf("\n");
+
             RBT_destroy(page_intersection_tree);
+            free(page_array);
         }
     }
     free(lineptr);
