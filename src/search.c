@@ -61,7 +61,6 @@ void search(char* line, RBT* symbol_table){
     }
 
     while(search_keyword != NULL && RBT_search(symbol_table, search_keyword) != NULL){
-        puts("teste");
         RBT* page_tree = RBT_search(symbol_table, search_keyword)->value;
         RBT* page_tree_aux = get_RBT_interesction(page_intersection_tree, page_tree);
         RBT_destroy(page_intersection_tree);

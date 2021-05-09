@@ -112,7 +112,6 @@ RBT *buildStopwordsTree(char *fileSource) {
     char stopWordsFilePath[strlen(fileSource) + strlen(appendsStopword) + 1];
     strcpy(stopWordsFilePath, fileSource);
     strcat(stopWordsFilePath, appendsStopword);
-    puts(stopWordsFilePath);
     FILE *stopsWordsFile = fopen(stopWordsFilePath, "r");
     if (stopsWordsFile == NULL) {
         fprintf(stderr, "Error opening file '%s'", stopWordsFilePath);
