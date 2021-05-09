@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "page.h"
+
 #define RED (1)
 #define BLK (0)
 
@@ -27,6 +29,7 @@ void RBT_runOnAll_postOrder(RBT *h, void (*visit)(RBT *));
 
 void RBT_destroy(RBT *h);
 
+Page** RBT_value_to_array(RBT *h, int* array_size, RBT* page_graph);
 //nossas
 
 #endif // !RBTREE_H_
