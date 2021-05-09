@@ -2,7 +2,7 @@
 
 #define BUFFERSIZE (250)
 
-char *strlwr(char *string) {
+char *strlwr(char *string){
     for (int i = 0; i < strlen(string); i++) {
         string[i] = tolower(string[i]);
     }
@@ -47,7 +47,6 @@ void readPage(RBT **tree, char *pageName, char *pagesFolder, RBT *stopwords, RBT
     char filePath[strlen(pageName) + strlen(pagesFolder) + 1];
     strcpy(filePath, pagesFolder);
     strcat(filePath, pageName);
-    printf("{%s}\n",filePath);
 
     char *wordBuffer = NULL;
     size_t wordBufferSize = 0;
@@ -108,7 +107,7 @@ RBT *readStopsFile(RBT *tree, FILE *file) {
 
 RBT *buildStopwordsTree(char *fileSource) {
     // Building stopFile path
-    char appendsStopword[] = "/stopwords.txt";
+    char appendsStopword[] = "stopwords.txt";
     char stopWordsFilePath[strlen(fileSource) + strlen(appendsStopword) + 1];
     strcpy(stopWordsFilePath, fileSource);
     strcat(stopWordsFilePath, appendsStopword);
@@ -129,14 +128,14 @@ RBT *buildStopwordsTree(char *fileSource) {
 RBT *readPages(char *fileSource, RBT **indexTree, RBT *stopTree) {
     // Reading index
     // Building indexFile path
-    char appendsIndex[] = "/index.txt";
+    char appendsIndex[] = "index.txt";
     char indexFilePath[strlen(fileSource) + strlen(appendsIndex) + 1];
     strcpy(indexFilePath, fileSource);
     strcat(indexFilePath, appendsIndex);
 
     // Reading pages
     // Building pagesFolder path
-    char appendsPages[] = "/pages/";
+    char appendsPages[] = "pages/";
     char pageFolderPath[strlen(fileSource) + strlen(appendsPages) + 1];
     strcpy(pageFolderPath, fileSource);
     strcat(pageFolderPath, appendsPages);
@@ -182,10 +181,10 @@ RBT *readData(char *fileSource, RBT **tree) {
  * */
 void readGraph(char *filesource, RBT *tree) {
     // Building file path
-    char appends[] = "/graph.txt";
+    char appends[] = "graph.txt";
     char graphFilePath[strlen(filesource) + strlen(appends) + 1];
     strcpy(graphFilePath, filesource);
-    strcat(graphFilePath, "/graph.txt");
+    strcat(graphFilePath, "graph.txt");
     // printf("Reading from graph file '%s'\n", graphFilePath);
 
     FILE *graphFile = fopen(graphFilePath, "r");
