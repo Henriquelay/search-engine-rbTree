@@ -130,7 +130,6 @@ void RBT_destroy(RBT *h) {
 
 void RBT_count_Nelem(RBT *h, int* nElem){
     if (h != NULL) {
-        printf("Tô recursando e nElem tem valor %d\n", (*nElem));
         (*nElem)++;
         RBT_count_Nelem(h->l, nElem);
         RBT_count_Nelem(h->r, nElem);
@@ -139,13 +138,8 @@ void RBT_count_Nelem(RBT *h, int* nElem){
 
 void insert_on_vec(RBT* h, Page** page_array, int* pos, RBT* page_graph){
     RBT* search_result = RBT_search(page_graph, h->key);
-    printf("#### Debug insert_on_vec ####\n");
-    printf("Estou procurando a chave %s\n", h->key);
     if(search_result){
-        puts("Inseri a página:");
-        Page_print(search_result->value);
         page_array[*pos] = search_result->value;
-        printf("Na posição %d\n", *pos);
         (*pos)++;
     }
 }
