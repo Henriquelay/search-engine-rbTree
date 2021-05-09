@@ -63,7 +63,7 @@ int main(int argc, char **argv){
     // RBT_runOnAll_inOrder(pagesTree, RBT_printPagesTreeNode);
     
     printf("############## NÃO LIGO PRA CIMA  ######################\n");
-    print_output(wordsTree);
+    print_output(wordsTree, pagesTree);
     RBT_freeReverseIndexTree(wordsTree);
     RBT_freePagesTree(pagesTree);
 }
