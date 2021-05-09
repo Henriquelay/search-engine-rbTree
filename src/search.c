@@ -51,10 +51,17 @@ void search(char* line, RBT* symbol_table){
     if(!line){return;}
     const char delim[2] = " ";
     char* search_keyword = strtok(line, delim);
-    RBT* page_intersection_tree = start_intersection_tree(symbol_table, search_keyword);
-    
-    search_keyword = strtok(NULL, delim);
-    while(search_keyword != NULL){
+    RBT* page_intersection_tree = NULL;
+    while(search_keyword != NULL && RBT_search(symbol_table,search_keyword) == NULL){
+        search_keyword = strtok(NULL, delim);
+    }
+    if(search_keyword != NULL){
+        page_intersection_tree = start_intersection_tree(symbol_table, search_keyword);
+        search_keyword = strtok(NULL, delim);
+    }
+
+    while(search_keyword != NULL && RBT_search(symbol_table, search_keyword) != NULL){
+        puts("teste");
         RBT* page_tree = RBT_search(symbol_table, search_keyword)->value;
         RBT* page_tree_aux = get_RBT_interesction(page_intersection_tree, page_tree);
         RBT_destroy(page_intersection_tree);
@@ -62,10 +69,11 @@ void search(char* line, RBT* symbol_table){
 
         search_keyword = strtok(NULL, delim);
     }
+    if(page_intersection_tree != NULL){
     printf("#### DEBUG ####\n");
     RBT_runOnAll_inOrder(page_intersection_tree, printa_key_RBT);
-
     RBT_destroy(page_intersection_tree);
+    }
 
 }
 
@@ -80,6 +88,7 @@ void print_output(RBT* symbol_table){
             lineptr[nCharacterRead - 1] = '\0';
         }
         if(!(*lineptr)){continue;}
+        // puts(lineptr);
         search(lineptr, symbol_table);
     }
     free(lineptr);

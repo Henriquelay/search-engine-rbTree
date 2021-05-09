@@ -58,11 +58,11 @@ int main(int argc, char **argv){
 
     readGraph(fileSource, pagesTree);
     calculate_pageRank(pagesTree);
-    puts("Pages TreeGraph after grafada braba:");
-    RBT_runOnAll_inOrder(pagesTree, RBT_printPagesTreeNode);
+    // puts("Pages TreeGraph after grafada braba:");
+    // RBT_runOnAll_inOrder(pagesTree, RBT_printPagesTreeNode);
     
     printf("############## NÃO LIGO PRA CIMA  ######################\n");
+    RBT_freePagesTree(pagesTree);
     print_output(wordsTree);
     RBT_freeReverseIndexTree(wordsTree);
-    RBT_freePagesTree(pagesTree);
 }
