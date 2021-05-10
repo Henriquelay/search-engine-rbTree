@@ -47,7 +47,7 @@ void readPage(RBT **tree, char *pageName, char *pagesFolder, RBT *stopwords, RBT
     char filePath[strlen(pageName) + strlen(pagesFolder) + 1];
     strcpy(filePath, pagesFolder);
     strcat(filePath, pageName);
-
+    
     char *wordBuffer = NULL;
     size_t wordBufferSize = 0;
     // '\n' delimiter is already treated by outer function
@@ -170,7 +170,7 @@ RBT *readData(char *fileSource, RBT **tree) {
     RBT *stopTree = buildStopwordsTree(fileSource);
     // puts("Stopwords Tree:");
     // RBT_runOnAll_inOrder(stopTree, RBT_printStopTreeNode);
-
+    
     RBT *pagesTree = readPages(fileSource, tree, stopTree);
     RBT_destroy(stopTree);
     return pagesTree;

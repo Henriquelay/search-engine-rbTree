@@ -7,6 +7,12 @@
 
 #include "list.h"
 
+/*
+    Biblioteca page.h
+    Contem a implementacao da estrutura de uma pagina
+    e as funcoes necessarias para o funcionamento    
+*/
+
 typedef struct page Page;
 struct page {
     char *name;

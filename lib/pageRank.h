@@ -7,7 +7,11 @@
 #include"page.h"
 #include"list.h"
 
+/*
+    Biblioteca pageRank.h
+    Contem a implementacao do calculo do page rank
+*/
+
 void calculate_pageRank(RBT *pages);
 
-
-#endif // !PAGERANK_H_
+#endif

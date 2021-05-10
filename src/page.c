@@ -62,9 +62,13 @@ void Page_print(Page *page) {
 int Page_cmp(const void* page1, const void *page2){
     Page* page1_deref = *(Page**)page1;
     Page* page2_deref = *(Page**)page2;
-    double rank_result = (page1_deref->pageRank) - (page2_deref->pageRank);
-    if((rank_result = page1_deref->pageRank - page2_deref->pageRank) != 0){
-        return rank_result;
+
+    if(page1_deref->pageRank > page2_deref->pageRank){
+        return -1;
     }
+    else if(page1_deref->pageRank < page2_deref->pageRank){
+        return 1;
+    }
+
     return strcmp(page1_deref->name, page2_deref->name);
 }

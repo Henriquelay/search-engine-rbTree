@@ -37,8 +37,6 @@ RBT* get_RBT_interesction(RBT *smaller_tree, RBT* bigger_tree){
 }
 
 
-
-
 RBT* start_intersection_tree(RBT* symbol_table, char* palavra){
     RBT* search_result = RBT_search(symbol_table, palavra);
     if(!search_result){
@@ -51,7 +49,6 @@ RBT* start_intersection_tree(RBT* symbol_table, char* palavra){
 
 // Symbol table key: string, 
 // Symbol table val: RBT* (páginas [key: string, val: null])
-
 RBT* search(char* line, RBT* symbol_table){
     if(!line){return NULL;}
     const char delim[2] = " ";
@@ -96,7 +93,6 @@ void print_output(RBT* symbol_table, RBT* page_graph){
             lineptr[nCharacterRead - 1] = '\0';
         }
         if(!(*lineptr)){continue;}
-        // puts(lineptr);
         lineptr = strlwr(lineptr);
         RBT* page_intersection_tree = search(lineptr, symbol_table);
         if(page_intersection_tree){

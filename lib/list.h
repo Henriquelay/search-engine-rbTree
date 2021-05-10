@@ -4,6 +4,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+/*
+    Biblioteca list.h
+    Contem a implementacao de uma lista encadeada generica
+    e funcoes de pilha e fila (enqueue/dequeue e push/pop)
+*/
 
 typedef struct linked_node_t {
     void* value;
@@ -27,6 +32,9 @@ void* list_pop(list_t* list);
 void list_enqueue(list_t* list, void* item);
 void* list_dequeue(list_t* list);
 
+/*
+    Executa uma funcao em todos os elementos de uma lista
+*/
 void list_runOnAll(list_t* list, void (*visit)(linked_node_t*));
 
 void list_print(list_t* stack, const char* format);

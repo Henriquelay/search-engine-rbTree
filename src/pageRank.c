@@ -2,6 +2,10 @@
 #define ALPHA 0.85
 #define PR_LIMIT 0.000001
 
+/*
+    Transforma a arvore de paginas em uma lista utilizando o
+    caminhamento em ordem
+*/
 list_t* convert_listFromRBT(RBT *h, list_t *pagesList)
 {
     if (h != NULL) {
@@ -13,28 +17,28 @@ list_t* convert_listFromRBT(RBT *h, list_t *pagesList)
 }
 
 void calculate_pageRank(RBT *pages) {
-    //Converte a arvore rb em uma lista, mais facil de acessar sequencialmente ao inves de usar 
-    //Caminhamento em ordem o tempo todo ou buscar na árvore.
+    // Converte a arvore rb em uma lista, mais facil de acessar sequencialmente ao inves de usar 
+    // Caminhamento em ordem o tempo todo ou buscar na árvore.
     list_t *pagesList = list_init();
     convert_listFromRBT(pages, pagesList);
     linked_node_t *currentPage = NULL;
 
-    //Inicialização dos valores padrao do page rank como 1/n para todas as paginas
+    // Inicialização dos valores padrao do page rank como 1/n para todas as paginas
     for(currentPage = pagesList->head; currentPage != NULL; currentPage = currentPage->next) {
         ((Page *)currentPage->value)->pageRank = 1/pagesList->count;
         ((Page *)currentPage->value)->pageRankPrev = ((Page *)currentPage->value)->pageRank;
     }
     
-    double currentLimit = 1;
+    double currentLimit = 1;    // Erro atual do calculo do page rank
     double sum;
     linked_node_t *currentInPage = NULL;
-    //Executa enquanto o somatorio E for maior que a constante definida arbitrariamente
+    // Executa enquanto o somatorio E for maior que a constante definida arbitrariamente
     while(currentLimit > PR_LIMIT) {
-        //Calcula o PR da iteracao atual de todas as paginas
+        // Calcula o PR da iteracao atual de todas as paginas
         for(currentPage = pagesList->head; currentPage != NULL; currentPage = currentPage->next) {
             sum = 0;
             int outPagesCount = ((Page *)currentPage->value)->outPagesCount;
-            //Calcula o somatorio de todas as paginas que tem link chegando na pagina atual
+            // Calcula o somatorio de todas as paginas que tem link chegando na pagina atual
             for(currentInPage = ((Page *)currentPage->value)->inPages->head; currentInPage != NULL; currentInPage = currentInPage->next) {
                 sum += ((Page *)currentInPage->value)->pageRankPrev/((Page *)currentInPage->value)->outPagesCount;
             }
@@ -48,11 +52,11 @@ void calculate_pageRank(RBT *pages) {
             }
         }
 
-        //Calcula o E da iteracao atual
+        // Calcula o erro da iteracao atual E(k)
         currentLimit = 0;
         for(currentPage = pagesList->head; currentPage != NULL; currentPage = currentPage->next) {
             currentLimit += fabs(((Page *)currentPage->value)->pageRank - ((Page *)currentPage->value)->pageRankPrev);
-            //Depois de utilzar o pageRank e o pageRankPrev para o calculo do E atualiza o page rank anterior sendo o atual para o proximo calculo
+            // Depois de utilzar o pageRank e o pageRankPrev para o calculo do E atualiza o page rank anterior sendo o atual para o proximo calculo
             ((Page *)currentPage->value)->pageRankPrev = ((Page *)currentPage->value)->pageRank;
         }
         currentLimit *= 1/(double)pagesList->count;

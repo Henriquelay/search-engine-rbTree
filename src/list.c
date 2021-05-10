@@ -31,7 +31,7 @@ void list_push(list_t *list, void *item) {
 
     newNode->value = item;
     newNode->previous = NULL;
-    // List is not empty
+    // Lista nao vazia
     if (list->head != NULL) {
         list->head->previous = newNode;
     }

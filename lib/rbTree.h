@@ -7,6 +7,12 @@
 
 #include "page.h"
 
+/*
+    Biblioteca rbTree.h
+    Contem a implementacao da estrutura da arvore vermelho e preta generica
+    e as funcoes necessarias para sua manipulacao.
+*/
+
 #define RED (1)
 #define BLK (0)
 
@@ -21,7 +27,6 @@ struct node {
 
 RBT *RBT_search(RBT *n, char *key);
 RBT *RBT_insert(RBT *h, char *key, void* value, void *(*callBack)(RBT *node, void* value));
-// void RBT_free(RBT *h); // Commented out for user to supply own free function with the runOnAll helpers
 
 void RBT_runOnAll_preOrder(RBT *h, void (*visit)(RBT *));
 void RBT_runOnAll_inOrder(RBT *h, void (*visit)(RBT *));
@@ -30,6 +35,5 @@ void RBT_runOnAll_postOrder(RBT *h, void (*visit)(RBT *));
 void RBT_destroy(RBT *h);
 
 Page** RBT_value_to_array(RBT *h, int* array_size, RBT* page_graph);
-//nossas
 
 #endif // !RBTREE_H_
